@@ -1,0 +1,883 @@
+{
+  "objects": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Object. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Objects by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "isOnline": {
+      "title": "Are Online",
+      "description": "Search for Objects with Online Versions.",
+      "type": "Field"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Objects that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "producedAt": {
+      "title": "Created At",
+      "description": "Search for Objects that were created at the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "producedBy": {
+      "title": "Created By",
+      "description": "Search for Objects that were created by the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "producedDate": {
+      "title": "Created Date",
+      "description": "Search for Objects by the date on which they were created.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "producedUsing": {
+      "title": "Created Using Technique",
+      "description": "Search for Objects that were created using the specified Technique.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "productionInfluencedBy": {
+      "title": "Creation Influenced By",
+      "description": "Search for Objects that were created with influence by the specified Person or Group",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "dimension": {
+      "title": "Dimension: Any",
+      "description": "Search for Objects by selecting a comparison operator and entering a value to be compared against each of the object's dimensions. The unit is centimeters.",
+      "type": "Field"
+    },
+    "depth": {
+      "title": "Dimension: Depth",
+      "description": "Search for Objects by selecting a comparison operator and entering a value to be compared against the object's depth dimension. The unit is centimeters.",
+      "type": "Field"
+    },
+    "height": {
+      "title": "Dimension: Height",
+      "description": "Search for Objects by selecting a comparison operator and entering a value to be compared against the object's height dimension. The unit is centimeters.",
+      "type": "Field"
+    },
+    "width": {
+      "title": "Dimension: Width",
+      "description": "Search for Objects by selecting a comparison operator and entering a value to be compared against the object's width dimension. The unit is centimeters.",
+      "type": "Field"
+    },
+    "encounteredAt": {
+      "title": "Encountered At",
+      "description": "Search for Objects that were encountered or found at the specified Place. This is primarily used for Specimens.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "encounteredBy": {
+      "title": "Encountered By",
+      "description": "Search for Objects that were encountered or found by the specified People & Groups. This is primarily used for Specimens.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "encounteredDate": {
+      "title": "Encountered Date",
+      "description": "Search for Objects by the date on which they were encountered or found.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "hasDigitalImage": {
+      "title": "Have Digital Image",
+      "description": "Search for Objects for which digital images are available.",
+      "type": "Field"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Objects by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Objects by a string identifier or an external authority URI, such as LCSH, BNF or wikidata.",
+      "type": "Field"
+    },
+    "carries": {
+      "title": "Include Works",
+      "description": "Search for Objects that include the specified Works. Use this option to include additional criteria from Works records in your search.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "material": {
+      "title": "Material",
+      "description": "Search for Objects that are made of the specified Material (used primarily for art works).",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "memberOf": {
+      "title": "Member of",
+      "description": "Search for Objects that are members of the specified Collection, Exhibition or Archive.",
+      "type": "Relationship",
+      "targetScope": "collections"
+    },
+    "recordType": {
+      "title": "Object Class",
+      "description": "Search for records categorized as either a \"Physical Object\" or a \"Digital Object\". Physical Objects are physical items, such as paintings, sculptures, fossils and other specimens, and archival objects. Individual physical copies of books are included in this class. Digital Object are digital items, such as internet resources (datasets, e-books, and other digital files). Digitized images of collection items that are physical objects can be found with the \u201cIs Online\u201d facet on Physical Objects.",
+      "type": "Field"
+    },
+    "subjectOfItem": {
+      "title": "Subject Of",
+      "description": "Search for Objects that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    }
+  },
+  "works": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Work. ",
+      "type": "Field"
+    },
+    "aboutConcept": {
+      "title": "About Concepts",
+      "description": "Search for Works that are about the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "aboutEvent": {
+      "title": "About Events",
+      "description": "Search for Works that are about the specified Events.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "aboutItem": {
+      "title": "About Objects",
+      "description": "Search for Works that are about the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "aboutAgent": {
+      "title": "About People & Groups",
+      "description": "Search for Works that are about the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "aboutPlace": {
+      "title": "About Places",
+      "description": "Search for Works that are about the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "aboutWork": {
+      "title": "About Works",
+      "description": "Search for Works that are about the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Works by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "isOnline": {
+      "title": "Are Online",
+      "description": "Search for Works with Online Versions.",
+      "type": "Field"
+    },
+    "isPublicDomain": {
+      "title": "Are in the Public Domain",
+      "description": "Search for Works that have been identified as public domain/no copyright materials. Note that this only applies to materials from the Yale University Art Gallery and Yale Center for British Art collections at this time. For copyright questions or more information about rights and re-use of content found in LUX, please contact the appropriate museum or library or consult the Rights and Usage Frequently Asked Questions(Advanced Search Help) linked below.",
+      "type": "Field"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Works that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "containsWork": {
+      "title": "Contains Works",
+      "description": "Search for Works that contain the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "createdAt": {
+      "title": "Created At",
+      "description": "Search for Works that were created at the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "createdBy": {
+      "title": "Created By",
+      "description": "Search for Works that were authored or created by the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "createdDate": {
+      "title": "Created Date",
+      "description": "Search for Works by the date on which they were authored or created. Note the difference with Publication Date.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "creationCausedBy": {
+      "title": "Creation Caused By",
+      "description": "Search for Works that were created because of the specified Events.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "creationInfluencedBy": {
+      "title": "Creation Influenced By",
+      "description": "Search for Works that were created with influence by the specified Person or Group",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "hasDigitalImage": {
+      "title": "Have Digital Image",
+      "description": "Search for Works for which digital images are available.",
+      "type": "Field"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Works by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Works by a string identifier, such as a call number, or an external authority URI, such as BNF, DNB or wikidata.",
+      "type": "Field"
+    },
+    "carriedBy": {
+      "title": "Included In Objects",
+      "description": "Search for Works that are included in the specified Objects. Use this option to include criteria from Objects in your search.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Search for Works in the specified Language.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "partOfWork": {
+      "title": "Part Of Works",
+      "description": "Search for Works that are part of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "publishedAt": {
+      "title": "Published At",
+      "description": "Search for Works that were published by the specified People & Groups. Note the difference with Creation Place, which is where the text was originally created.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "publishedBy": {
+      "title": "Published By",
+      "description": "Search for Works that were published by the specified People & Groups. Note the difference with Creation People & Groups that originally wrote the text or conceived the work.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "publishedDate": {
+      "title": "Published Date",
+      "description": "Search for Works by the date on which they were published. Note the difference with Creation Date, which is when the work was originally conceived by its creator.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "subjectOfWork": {
+      "title": "Subject Of",
+      "description": "Search for Works that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "recordType": {
+      "title": "Work Class",
+      "description": "Search for records categorized as either a \"Visual Work\" or a \"Textual Work. Visual Works are Works that are primarily visual, such as the images shown by paintings or photographs, sculptures, or other non language oriented creative expressions. Textual Works are Works that are primarily textual or otherwise convey information via human language. An Object may include both visual and textual works, such as a poster with graphics and text. In addition, Textual Works encompasses most items from the Library collections, including posters, artworks, musical scores, video and sound recordings.",
+      "type": "Field"
+    }
+  },
+  "people_or_groups": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Person or Group. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for People & Groups by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "startAt": {
+      "title": "Born/Formed At",
+      "description": "Search for People & Groups that were born or formed in the specified Place.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "startDate": {
+      "title": "Born/Formed Date",
+      "description": "Search People & Groups by the date on which they were born or formed.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "carriedOut": {
+      "title": "Carried Out",
+      "description": "Search for People & Groups that carried out the specified Event.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for People & Groups that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "produced": {
+      "title": "Created Object",
+      "description": "Search for People & Groups that created the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "created": {
+      "title": "Created Works",
+      "description": "Search for People & Groups that authored or created the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "curated": {
+      "title": "Curated",
+      "description": "Search for Groups responsible for the curation of Yale's collections.",
+      "type": "Relationship",
+      "targetScope": "collections"
+    },
+    "endAt": {
+      "title": "Died/Dissolved At",
+      "description": "Search for People & Groups that died or were dissolved in the specified Place.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "endDate": {
+      "title": "Died/Dissolved Date",
+      "description": "Search for People & Groups by the date on which they died or were dissolved.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "encountered": {
+      "title": "Encountered",
+      "description": "Search for People & Groups that encountered or found the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "foundedBy": {
+      "title": "Founded By",
+      "description": "Search for Groups by the specified People that were responsible for their foundation.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "founded": {
+      "title": "Founded Group",
+      "description": "Search for People who were responsible for the foundation of the specified Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "gender": {
+      "title": "Gender",
+      "description": "Search for People by the specified Gender. This information comes from external sources, and gender information may not match expected results.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "hasDigitalImage": {
+      "title": "Have Digital Image",
+      "description": "Search for People & Groups for which digital images are available.",
+      "type": "Field"
+    },
+    "memberOfInverse": {
+      "title": "Have Member",
+      "description": "Search for Groups that have the specified People & Groups as members.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for People & Groups by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for People & Groups by a string identifier or an external authority URI, such as ULAN, VIAF or wikidata.",
+      "type": "Field"
+    },
+    "influenced": {
+      "title": "Influenced",
+      "description": "Search for People & Groups that influenced the specified Concepts",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "influencedProduction": {
+      "title": "Influenced Creation Of Objects",
+      "description": "Search for People & Groups that influenced the creation of the specified Objects",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "influencedCreation": {
+      "title": "Influenced Creation Of Works",
+      "description": "Search for People & Groups that influenced the creation of the specified Works",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "memberOf": {
+      "title": "Member of",
+      "description": "Search for People & Groups that are members of other Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "nationality": {
+      "title": "Nationality",
+      "description": "Search for People & Groups with the specified Nationality.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "occupation": {
+      "title": "Occupation/Role",
+      "description": "Search for People & Groups with the specified Occupation or Role.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "recordType": {
+      "title": "Person or Group Class",
+      "description": "Search for records categorized as either a \"Person\" or a \"Group\". Person is an individual either real or fictionalized. Group is an organization, either real or fictionalized, with one or more members.",
+      "type": "Field"
+    },
+    "professionalActivity": {
+      "title": "Professional Activity Categorized As",
+      "description": "Search for people and groups that carried out professional activities of the given categorization.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "activeAt": {
+      "title": "Professionally Active At",
+      "description": "Search for People & Groups that were professionally active in the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "activeDate": {
+      "title": "Professionally Active Date",
+      "description": "Search for People & Groups by the dates on which they were professionally active.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "published": {
+      "title": "Published",
+      "description": "Search for People & Groups that published the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "subjectOfAgent": {
+      "title": "Subject Of",
+      "description": "Search for People & Groups that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    }
+  },
+  "places": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Place. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Places by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Places that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "hasDigitalImage": {
+      "title": "Have Digital Image",
+      "description": "Search for Places for which digital images are available.",
+      "type": "Field"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Places by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Places by a string identifier or an external authority URI, such as TGN, Geonames or wikidata.",
+      "type": "Field"
+    },
+    "influenced": {
+      "title": "Influenced",
+      "description": "Search for Places that influenced the specified Concepts.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "partOf": {
+      "title": "Part of",
+      "description": "Search for Places that are within the specified Place.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "activePlaceOfAgent": {
+      "title": "Place of Activity of",
+      "description": "Search for Places where the specified People & Groups were professionally active.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "startPlaceOfAgent": {
+      "title": "Place of Birth/Formation of",
+      "description": "Search for Places where People & Groups were born or formed.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "producedHere": {
+      "title": "Place of Creation Of Objects",
+      "description": "Search for Places where the specified Objects were created.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "createdHere": {
+      "title": "Place of Creation Of Works",
+      "description": "Search for Places where Works were Created.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "endPlaceOfAgent": {
+      "title": "Place of Death of",
+      "description": "Search for Places where the specified People & Groups died or were dissolved.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "encounteredHere": {
+      "title": "Place of Encounter Of",
+      "description": "Search for Places where the specified Objects were encountered.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "placeOfEvent": {
+      "title": "Place of Events",
+      "description": "Search for Places where the specified Events occurred.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "publishedHere": {
+      "title": "Place of Publication Of",
+      "description": "Search for Places where the specified Works were published.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "subjectOfPlace": {
+      "title": "Subject Of",
+      "description": "Search for Places that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    }
+  },
+  "concepts": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Concept or Type. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Concept & Types by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "broader": {
+      "title": "Broader Concepts",
+      "description": "Search for Concept terms that are hierarchically narrower than the specified broader term.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Concept and Type terms that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "classificationOfConcept": {
+      "title": "Category for Concepts",
+      "description": "Search for Concept and Type terms that are the category of the specified Concept & Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "classificationOfEvent": {
+      "title": "Category for Events",
+      "description": "Search for Concept and Type terms that are the category of the specified Events.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "classificationOfItem": {
+      "title": "Category for Objects",
+      "description": "Search for Concept and Type terms that are the category of the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "classificationOfAgent": {
+      "title": "Category for People & Groups",
+      "description": "Search for Concept and Type terms that are the category of the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "classificationOfPlace": {
+      "title": "Category for Places",
+      "description": "Search for Concept and Type terms that are the category of the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "classificationOfWork": {
+      "title": "Category for Works",
+      "description": "Search for Concept and Type terms that are the category of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "recordType": {
+      "title": "Concept Class",
+      "description": "Search for records categorized as either a \"Measurement Unit\", \"Language\", \"Material\", \"Currency\" or a \"General Concept\". Measurement Units are Concepts that are used as the unit of a measurement, such as inches, seconds, kilograms or bytes. Languages are Concepts that represent human-spoken languages, such as English, Spanish or Latin. Materials are Concepts that represent a class of physical material, such as bronze, paper, or agate. Currencies are Concepts that represent monetary currencies, such as dollars, euros, or francs. General Concepts are Concepts that represent more general ideas or subjects, which excludes the more specific classes of Measurement Unit, Language, Material, and Currency.",
+      "type": "Field"
+    },
+    "genderOf": {
+      "title": "Gender of",
+      "description": "Search for Concept terms that describe the Gender of the specified People & Groups. This information comes from external sources, and gender information may not match expected results.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "hasDigitalImage": {
+      "title": "Have Digital Image",
+      "description": "Search for Concept and Type terms for which digital images are available.",
+      "type": "Field"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Concept or Type terms by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Concept or Type terms by a string identifier or an external authority URI, such as AAT, LCSH or wikidata.",
+      "type": "Field"
+    },
+    "influenced": {
+      "title": "Influenced",
+      "description": "Search for Concepts that influenced the specified Concepts.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "influencedByConcept": {
+      "title": "Influenced By Concepts",
+      "description": "Search for Concepts which are influenced by the specified Concepts.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "influencedByEvent": {
+      "title": "Influenced By Events",
+      "description": "Search for Concepts which are influenced by the specified Events.",
+      "type": "Relationship",
+      "targetScope": "events"
+    },
+    "influencedByAgent": {
+      "title": "Influenced By People & Groups",
+      "description": "Search for Concepts which are influenced by the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "influencedByPlace": {
+      "title": "Influenced By Places",
+      "description": "Search for Concepts which are influenced by the specified Places.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "languageOf": {
+      "title": "Language of Works",
+      "description": "Search for Concept terms that describe the Language of the specified Work.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "materialOfItem": {
+      "title": "Material of",
+      "description": "Search for Concepts that are the material of the specified Object (used primarily for art works).",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "narrower": {
+      "title": "Narrower Concepts",
+      "description": "Search for Concept terms that are hierarchically broader than the specified Narrower term.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "nationalityOf": {
+      "title": "Nationality of",
+      "description": "Search for Concept terms that describe the Nationality of the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "occupationOf": {
+      "title": "Occupation of",
+      "description": "Search for Concept terms that describe the Occupation of the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "professionalActivityOf": {
+      "title": "Professional Activity of",
+      "description": "Search for Concept terms that describe the Professional Activity of the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "subjectOfConcept": {
+      "title": "Subject Of",
+      "description": "Search for Concept & Type terms that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "usedToProduce": {
+      "title": "Technique Of",
+      "description": "Search for Concept and Type terms that are the creation technique of the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    }
+  },
+  "events": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Event. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Events by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "carriedOutBy": {
+      "title": "Carried Out By",
+      "description": "Search for Events that were carried out by the specified People & Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Events that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "causedCreationOf": {
+      "title": "Caused Creation Of",
+      "description": "Search for Events that caused the creation of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "endDate": {
+      "title": "End Date",
+      "description": "Search for Events by the date on which they ended.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "recordType": {
+      "title": "Event Class",
+      "description": "Search for records categorized as either a \"Period\" or an \"Activity\". Periods are Events that have the class of Period, which consists of a Time Period, as opposed to other human-caused activities. Activities are Events that have the class of Activity, which consists of events such as Exhibitions or other collections-related activities.",
+      "type": "Field"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Events by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Events by a string identifier, such as an Accession Number, or an external authority URI, such as VIAF or wikidata.",
+      "type": "Field"
+    },
+    "influenced": {
+      "title": "Influenced",
+      "description": "Search for Events that influenced the specified Concepts.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "startDate": {
+      "title": "Start Date",
+      "description": "Search for Events by the date on which they started.",
+      "type": "Field",
+      "format": "datetime"
+    },
+    "subjectOfEvent": {
+      "title": "Subject Of",
+      "description": "Search for Events that are the subject of the specified Works.",
+      "type": "Relationship",
+      "targetScope": "works"
+    },
+    "tookPlaceAt": {
+      "title": "Took Place At",
+      "description": "Search for Events which occurred at the specified Place.",
+      "type": "Relationship",
+      "targetScope": "places"
+    },
+    "used": {
+      "title": "Used",
+      "description": "Search for Events which used the specified records.",
+      "type": "Relationship",
+      "targetScope": "collections"
+    }
+  },
+  "collections": {
+    "name": {
+      "title": "Name",
+      "description": "Enter term(s) to be found within the title or name of the Collection. ",
+      "type": "Field"
+    },
+    "text": {
+      "title": "Anywhere",
+      "description": "Search for Collections by terms anywhere in the record. ",
+      "type": "Field"
+    },
+    "classification": {
+      "title": "Categorized As",
+      "description": "Search for Collections that are categorized with the specified Concept or Type terms.",
+      "type": "Relationship",
+      "targetScope": "concepts"
+    },
+    "containingSet": {
+      "title": "Containing Collections",
+      "description": "Search for Collections that contain the specified Collections.",
+      "type": "Relationship",
+      "targetScope": "collections"
+    },
+    "containingItem": {
+      "title": "Containing Objects",
+      "description": "Search for Collections that contain the specified Objects.",
+      "type": "Relationship",
+      "targetScope": "objects"
+    },
+    "curatedBy": {
+      "title": "Curated By",
+      "description": "Search for Collections that are maintained by the specified Groups.",
+      "type": "Relationship",
+      "targetScope": "people_or_groups"
+    },
+    "id": {
+      "title": "ID",
+      "description": "Search for Collections by their LUX data URI (e.g. starting with https://lux.collections.yale.edu/data/ and followed by a URI path containing a UUID, not the URI with /view/ in it).",
+      "type": "Field"
+    },
+    "identifier": {
+      "title": "Identifier",
+      "description": "Search for Collections by a string identifier or an external authority URI, such as VIAF or wikidata.",
+      "type": "Field"
+    },
+    "memberOf": {
+      "title": "Member of",
+      "description": "Search for Collections that are hierarchically within the specified Collection.",
+      "type": "Relationship",
+      "targetScope": "collections"
+    },
+    "usedForEvent": {
+      "title": "Used for Exhibitions",
+      "description": "Search for Collections that record the objects used in the specified Events.",
+      "type": "Relationship",
+      "targetScope": "events"
+    }
+  }
+}

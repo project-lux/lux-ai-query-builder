@@ -18,10 +18,10 @@ Events. Events happen in time and at a place, and then are over. They have a beg
 
 Properties of Linked Art classes:
 
-Instances of all of the classes can have a "name" Field. The name of the author of The Lord of the Rings is "J.R.R. Tolkien". The name of the capital of France is "Paris".
-Instances of all of the classes can have an "identifier" Field. The identifier for the English language concept is "en".
-Instances of all classes can have a "text" Field which includes all of the content about the instance. This could be called a description.
-Instances of all classes can have a "hasDigitalImage" Field which is a true/false field for whether the instance has a digital image. The value of the field must be either 1 or 0.
+Instances of all of the classes have a "name" Field. The name of the author of The Lord of the Rings is "J.R.R. Tolkien". The name of the capital of France is "Paris".
+Instances of all of the classes have an "identifier" Field. The identifier for the English language concept is "en".
+Instances of all classes have a "text" Field which includes all of the content about the instance. This could be called a description.
+Instances of all classes have a "hasDigitalImage" Field which is a true/false field for whether the instance has a digital image. The value of the field must be either 1 or 0.
 
 People and Groups have a "startDate" Field which is the date on which they were born or formed. Dates must be expressed with full year, month, day, hours, minutes and seconds.
 People and Groups have an "endDate" Field which is the date on which they died or the group was dissolved.
@@ -30,6 +30,9 @@ Works have a "createdDate" Field which is the date on which they were created.
 Objects have an "encounteredDate" Field which is the date on which they were encountered, found or discovered.
 Events have a "startDate" Field which is the date at which they began.
 Events have an "endDate" Field which is the date at which they finished.
+
+People and Groups have a "recordType" Field which has only two possible values: 'Person', if the entity is a person, or 'Group' if the entity is a group. No other values are possible for People and Groups. For example J.R.R. Tolkien has a "recordType" of "Person"
+Concepts have a "recordType" Field which has only five possible values: 'Material', 'Currency', 'Language', 'MeasurementUnit' and 'Type' for all other concepts which are not the previous ones. For example Gold has a "recordType" of "Material", and English has a "recordType" of "Language".
 
 Instances of all classes can have a "memberOf" Relationship to a Collection. This Relationship is when the instance is part of, or a member of, the collection. The inverse Relationship for searching for instances that are members of the current collection is "member".
 Instances of all of the classes can have a "classification" Relationship that refers to a Concept that they are categorized as. For example, an Object might be categorized as a painting Concept.
@@ -54,6 +57,12 @@ Objects have a "carries" Relationship which refers to the Work which can be seen
 Objects have a "material" Relationship which refers to the Concept that conveys the material out of which they are made. For example, a sculpture has a "material" of marble. The inverse Relationship is "materialOfItem".
 Places have a "partOf" Relationship which refers to another Place of which they are part. For example, Paris is partOf France.
 Concepts have a "broader" Relationship which refers to another Concept of which they are part, or are narrower than. For example the material concept of "oil paint" might have a broader concept of "paint". The inverse Relationship is called "narrower".
+Concepts have a "classificationOfItem" Relationship which refers to an Object that is classified as the Concept. For example the concept for Painting is the classificationOfItem to every physical painting. The inverse is "classification".
+Concepts have a "classificationOfWork" Relationship which refers to a Work that is classified as the Concept. For example the concept for Text is the classificationOfWork to every conceptual, linguistic work. The inverse is "classification".
+Concepts have a "classificationOfAgent" Relationship which refers to an Agent that is classified as the Concept. For example the concept for Professor is the classificationOfAgent to every person who is a professor. The inverse is "classification".
+Concepts have a "classificationOfPlace" Relationship which refers to a Place that is classified as the Concept. For example the concept for City is the classificationOfPlace to every place that is a city. The inverse is "classification".
+Concepts have a "classificationOfConcept" Relationship which refers to a Concept that is classified as the first Concept. For example the concept for Species is the classificationOfConcept to every species concept, such as brontosaurus. The inverse is "classification".
+Concepts have a "classificationOfEvent" Relationship which refers to an Event that is classified as the Concept. For example the concept for Exhibitions is the classificationOfEvent to every exhibition activity. The inverse is "classification".
 Works have a "aboutConcept" Relationship which refers to a Concept that the work is about, depicts, or has as a topic or subject.
 Works have a "aboutEvent" Relationship which refers to an Event that the work is about, depicts, or has as a topic or subject.
 Works have a "aboutItem" Relationship which refers to an Object that the work is about, depicts, or has as a topic or subject.

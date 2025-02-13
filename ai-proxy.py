@@ -106,11 +106,11 @@ def test_response(q, output, attempt=1):
         if errs:
             for e in errs:
                 print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
-            raise ValueError("schema validation failed")
+            raise ValueError(f"schema validation failed for {q2}")
         q2['_scope'] = scope
         jstr = json.dumps(q2)
     except:
-        raise ValueError("invalid json in Q")
+        raise ValueError(f"invalid json in {q2}")
 
     # Test hits
     okay = test_hits(scope, jstr)
@@ -119,7 +119,7 @@ def test_response(q, output, attempt=1):
             query_cache.popitem()
         query_cache[q] = jstr
     elif attempt == 1:
-        raise ValueError("Try again...")
+        raise ValueError(f"No hits for {q2}")
     return jstr
 
 
@@ -158,7 +158,8 @@ def make_Q(scope):
     output = generate(q)
     try:
         jstr = test_response(q, output)
-    except:
+    except ValueError as e:
+        print(e)
         output = generate(q)
         print(f"Attempt 2: {output}")
         try:
