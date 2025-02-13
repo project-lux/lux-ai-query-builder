@@ -1,0 +1,4 @@
+flask
+vertexai
+google
+jsonschema
