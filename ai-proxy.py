@@ -25,6 +25,8 @@ client = genai.Client(
       location="us-central1",
 )
 
+LUX_HOST = "https://lux.collections.yale.edu"
+
 with open('system-prompt.txt') as fh:
     textsi_1 = fh.read().strip()
 
@@ -125,7 +127,7 @@ def test_response(q, output, attempt=1):
 
 def test_hits(scope, query):
     encq = quote_plus(query)
-    url = f"http://localhost:8080/api/search-estimate/{scope}?q={encq}"
+    url = f"{LUX_HOST}/api/search-estimate/{scope}?q={encq}"
     try:
         resp = requests.get(url)
         js = resp.json()
