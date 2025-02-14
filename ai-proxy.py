@@ -173,6 +173,15 @@ def make_query(scope):
     print(jstr)
     return jstr
 
+@app.route('/api/translate_raw/<string:scope>', methods=['GET'])
+def make_query(scope):
+    q = request.args.get('q', None)
+    if not q:
+        return ""
+    output = generate(q)
+    jstr = json.dumps(output)
+    return jstr
+
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
     return json.dumps(query_cache)
