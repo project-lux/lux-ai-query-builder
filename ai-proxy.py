@@ -187,7 +187,7 @@ def make_query_raw(scope):
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
     which = request.args.get('type', 'okay')
-    if type.startswith('fail'):
+    if which.startswith('fail'):
         return json.dumps(failed_query_cache)
     else:
         return json.dumps(query_cache)
