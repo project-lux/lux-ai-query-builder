@@ -174,7 +174,7 @@ def make_query(scope):
     return jstr
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
-def make_query(scope):
+def make_query_raw(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
