@@ -122,6 +122,8 @@ def test_response(q, output, attempt=1):
         query_cache[q] = jstr
     elif attempt == 1:
         raise ValueError(f"No hits for {q2}")
+    else:
+        failed_query_cache[q] = jstr
     return jstr
 
 
@@ -141,6 +143,7 @@ def test_hits(scope, query):
 
 # Refactor to use @functools.lru_cache
 query_cache = {}
+failed_query_cache = {}
 
 app = Flask(__name__)
 @app.after_request
@@ -183,7 +186,11 @@ def make_query_raw(scope):
 
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
-    return json.dumps(query_cache)
+    which = request.args.get('type', 'okay')
+    if type.startswith('fail'):
+        return json.dumps(failed_query_cache)
+    else:
+        return json.dumps(query_cache)
 
 @app.route('/api/reload_system_prompt', methods=['GET'])
 def reload_system_prompt():
