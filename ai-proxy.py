@@ -179,8 +179,7 @@ def make_query_raw(scope):
     if not q:
         return ""
     output = generate(q)
-    jstr = json.dumps(output)
-    return jstr
+    return output
 
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
