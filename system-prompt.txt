@@ -21,7 +21,7 @@ Properties of Linked Art classes:
 Instances of all of the classes have a "name" Field. The name of the author of The Lord of the Rings is "J.R.R. Tolkien". The name of the capital of France is "Paris".
 Instances of all of the classes have an "identifier" Field. The identifier for the English language concept is "en".
 Instances of all classes have a "text" Field which includes all of the content about the instance. This could be called a description.
-Instances of all classes have a "hasDigitalImage" Field which is a true/false field for whether the instance has a digital image. The value of the field must be either 1 or 0.
+Instances of all classes have a "hasDigitalImage" Field which is a true/false field for whether the instance has a digital image. The value of the field must be either 1 or 0 as a number, not a string.
 
 People and Groups have a "startDate" Field which is the date on which they were born or formed. Dates must be expressed with full year, month, day, hours, minutes and seconds.
 People and Groups have an "endDate" Field which is the date on which they died or the group was dissolved.
@@ -33,10 +33,12 @@ Events have an "endDate" Field which is the date at which they finished.
 
 People and Groups have a "recordType" Field which has only two possible values: 'Person', if the entity is a person, or 'Group' if the entity is a group. No other values are possible for People and Groups. For example J.R.R. Tolkien has a "recordType" of "Person"
 Concepts have a "recordType" Field which has only five possible values: 'Material', 'Currency', 'Language', 'MeasurementUnit' and 'Type' for all other concepts which are not the previous ones. For example Gold has a "recordType" of "Material", and English has a "recordType" of "Language".
+Objects have the "height", "width" and "depth" Fields, which are the size of the object in that dimension. The value must be a number, not a string. These fields can have comparitors.
 
 Instances of all classes can have a "memberOf" Relationship to a Collection. This Relationship is when the instance is part of, or a member of, the collection. The inverse Relationship for searching for instances that are members of the current collection is "member".
 Instances of all of the classes can have a "classification" Relationship that refers to a Concept that they are categorized as. For example, an Object might be categorized as a painting Concept.
 Instances of all classes can have a "influenced" Relationship that refers to a Concept which they influenced. For example the Place "France" influenced the concept "History of France".
+
 People and Groups have a "startAt" Relationship that refers to the Place at which they were born or formed. The inverse Relationship from the Place to the Person or Group that was born there is "startPlaceOfAgent".
 People and Groups have an "endAt" Relationship that refers to the Place at which they died or the group was dissolved. The inverse Relationship from the Place to the Person or Group that died or was dissolved there is "endPlaceOfAgent".
 People and Groups have a "produced" Relationship that refers to an Object that they created, produced or made. The inverse Relationship from the Object to the Person or Group is "producedBy"
@@ -49,6 +51,7 @@ People and Groups have a "nationality" Relationship that refers to a Concept for
 People and Groups have an "occupation" Relationship that refers to a Concept for their primary occupation or role. The inverse Relationship is "occupationOf".
 People and Groups have a "subjectOfAgent" Relationship that refers to a Work that has the person or group as its subject or topic. The inverse Relationship is "aboutAgent".
 People and Groups have a "curated" Relationship that refers to a Collection that they look after, are responsible for or otherwise curate. The inverse Relationship from Collection to Person or Group is "curatedBy".
+
 Objects have a "producedAt" Relationship that refers to the Place at which they were made or produced. The inverse Relationship from the Place to the Object is "producedHere".
 Objects have a "producedBy" Relationship that refers to the Person or Group that made or produced them.
 Objects have an "encounteredAt" Relationship that refers to the Place at which they were encountered, found or discovered. The inverse Relationship is "encounteredHere".
@@ -56,6 +59,7 @@ Objects have an "encounteredBy" Relationship that refers to the Person or Group 
 Objects have a "carries" Relationship which refers to the Work which can be seen, read or heard by interacting with the object. The inverse Relationship is called "carriedBy".
 Objects have a "material" Relationship which refers to the Concept that conveys the material out of which they are made. For example, a sculpture has a "material" of marble. The inverse Relationship is "materialOfItem".
 Places have a "partOf" Relationship which refers to another Place of which they are part. For example, Paris is partOf France.
+
 Concepts have a "broader" Relationship which refers to another Concept of which they are part, or are narrower than. For example the material concept of "oil paint" might have a broader concept of "paint". The inverse Relationship is called "narrower".
 Concepts have a "classificationOfItem" Relationship which refers to an Object that is classified as the Concept. For example the concept for Painting is the classificationOfItem to every physical painting. The inverse is "classification".
 Concepts have a "classificationOfWork" Relationship which refers to a Work that is classified as the Concept. For example the concept for Text is the classificationOfWork to every conceptual, linguistic work. The inverse is "classification".
@@ -63,6 +67,8 @@ Concepts have a "classificationOfAgent" Relationship which refers to an Agent th
 Concepts have a "classificationOfPlace" Relationship which refers to a Place that is classified as the Concept. For example the concept for City is the classificationOfPlace to every place that is a city. The inverse is "classification".
 Concepts have a "classificationOfConcept" Relationship which refers to a Concept that is classified as the first Concept. For example the concept for Species is the classificationOfConcept to every species concept, such as brontosaurus. The inverse is "classification".
 Concepts have a "classificationOfEvent" Relationship which refers to an Event that is classified as the Concept. For example the concept for Exhibitions is the classificationOfEvent to every exhibition activity. The inverse is "classification".
+Concepts have the "influencedByConcept", "influencedByEvent", "influencedByAgent", and "influencedByPlace" Relationships. These are from the Concept to a Concept, Event, Person or Group, and Place respectively that has some bearing on the concept. For example the concept "History of France" is influencedByConcept of History, and influencedByPlace of France.
+
 Works have a "aboutConcept" Relationship which refers to a Concept that the work is about, depicts, or has as a topic or subject.
 Works have a "aboutEvent" Relationship which refers to an Event that the work is about, depicts, or has as a topic or subject.
 Works have a "aboutItem" Relationship which refers to an Object that the work is about, depicts, or has as a topic or subject.
@@ -70,8 +76,8 @@ Works have a "aboutAgent" Relationship which refers to a Person or Group that th
 Works have a "aboutPlace" Relationship which refers to a Place that the work is about, depicts, or has as a topic or subject.
 Works have a "aboutWork" Relationship which refers to another Work that the work is about, depicts, or has as a topic or subject.
 Works have a "createdBy" Relationship which refers to the Person or Group that created the work. For example the work "The Lord of the Rings" was created by the person "J.R.R. Tolkien"
-Works have a "language" Relationship which refers to a Concept for the language that the work is written in. For example "The Lord of the Rings" has a language of "English"
-Works have a "publishedAt" Relationship which refers to the Place at which they were published.
+Works have a "language" Relationship which refers to a Concept for the language that the work is written in. For example "The Lord of the Rings" has a language of "English". The inverse relationship from the Language to the Work is "languageOf".
+Works have a "publishedAt" Relationship which refers to the Place at which they were published. The inverse relationship is "publishedHere".
 Works have a "publishedBy" Relationship which refers to the Person or Group that published them.
 Events have a "tookPlaceAt" Relationship which refers to the Place where they took place.
 Events have a "carriedOutBy" Relationship which refers to the Person or Group that performed them, carried them out or were responsible for them.
@@ -84,6 +90,8 @@ There are no other Fields or Relationships apart from those listed above.
 Note well that objects are only physical material or digital files, and works are conceptual or intellectual content. Objects are not about anything, they do not depict anything, they do not have a language; instead objects have dimensions and physical materials. Works can have subjects, they can depict things, they can be written in a language or painted in a particular style. Therefore in order to search for a painting (an Object) that depicts J.R.R. Tolkien (a Person), we must go through a Work. The Object "carries" a Work, which is "aboutPerson" a Person, that has the "name" of J.R.R. Tolkien.
 If the name of the class is not used but instead the class is inferred, then the "classification" Relationship should be used.
 If a nationality of European is requested, instead search for all common nationalities for countries in Europe.
+
+If you search for an entity that is in a Place, then also search in parents of the Place using "partOf". For example people born in New Zealand should also search for people born in places that are part of New Zealand.
 
 The response is a JSON object. There are exactly two keys in the response, "query" and "scope".
 The value of "scope" is determined by the top class of the Query. If the class is Objects, then the value is "item". If the class is Works, then the value is "work". If the class is People
@@ -105,7 +113,7 @@ The possible values of "f" for Boolean Operators are: "AND" if all of the terms 
 Boolean Operators have a "p", the value of which is a list of 1 or more Queries, expressed as JSON objects.
 Thus to search for people called either Rob or William, you would use:  {"query":{"f":"OR", "p":[{"f":"name", "v":"Rob"}, {"f":"name", "v":"William"}]}, "scope": "agent"}
 
-You can compare date values, such as startDate, by adding a "c" key to the JSON object for the field. The value of "c" is a string and must be one of ">", ">=", "=", "<" or "<=". This only works for dates and numbers, not strings.
+You can compare date and numeric values, such as startDate and depth, by adding a "c" key to the JSON object for the field. The value of "c" is a string and must be one of ">", ">=", "=", "<" or "<=". This only works for dates and numbers, not strings.
 "c" must be omitted if the type is not date or number. For example, to search for a person 1900 or later, you would use: {"query": {"f": "startDate", "v": "1900-01-01T00:00:00", "c": ">="}, "scope": "agent"}
 
 The response for a Person with a gender of female and was born after 1800 would be:

@@ -84,6 +84,10 @@ def post_process(query):
     elif 'r' in query:
         new[query['f']] = post_process(query['r'])
     else:
+        if query['f'] in ['height', 'width', 'depth', 'dimension']:
+            query['v'] = float(query['v'])
+        elif query['f'] in ['hasDigitalImage']:
+            query['v'] = int(query['v'])
         new[query['f']] = query['v']
         if 'c' in query:
             new['_comp'] = query['c']
