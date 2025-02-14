@@ -32,7 +32,7 @@ model = "gemini-2.0-flash-001"
 # model = "gemini-2.0-pro-exp-02-05"
 # model = "gemini-1.5-pro-002"
 
-generate_content_config = types.GenerateContentConfig(
+generated_config = types.GenerateContentConfig(
     temperature = 1,
     top_p = 0.95,
     max_output_tokens = 8192,
@@ -67,7 +67,7 @@ def generate(prompt):
   for chunk in client.models.generate_content_stream(
     model = model,
     contents = contents,
-    config = generate_content_config,
+    config = generated_config,
     ):
     output.append(chunk.text)
   return ''.join(output)
@@ -148,7 +148,7 @@ def add_cors(response):
     return response
 
 @app.route('/api/translate/<string:scope>', methods=['GET'])
-def make_Q(scope):
+def make_query(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
@@ -161,19 +161,27 @@ def make_Q(scope):
     except ValueError as e:
         print(e)
         output = generate(q)
-        print(f"Attempt 2: {output}")
+        print(f"Attempt 2...")
         try:
             jstr = test_response(q, output, attempt=2)
         except ValueError as e:
+            print(e)
             return error_q.replace("ERROR", str(e))
 
     print(jstr)
     return jstr
 
-@app.route('/api/dumpcache', methods=['GET'])
+@app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
     return json.dumps(query_cache)
 
+@app.route('/api/reload_system_prompt', methods=['GET'])
+def reload_system_prompt():
+    with open('system-prompt.txt') as fh:
+        textsi_1 = fh.read().strip()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    generated_config.system_instruction=[types.Part.from_text(text=textsi_1)]
+    return {"status": "ok"}
+
+#if __name__ == '__main__':
+#    app.run(debug=True)
