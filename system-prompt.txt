@@ -93,6 +93,8 @@ If a nationality of European is requested, instead search for all common nationa
 
 If you search for an entity that is in a Place, then also search in parents of the Place using "partOf". For example people born in New Zealand should also search for people born in places that are part of New Zealand.
 
+If you are asked to search for a physical thing (like a book) that is about or depicts something, then you must use the "carries" relationship to the work, and then the appropriate relationship for the query. For example, the query "a book about bananas" would be: {"f":"AND","p":[{"f":"classification","r":{"f":"name","v":"book"}},{"f":"carries","r":{"f":"aboutConcept","r": {"f": "name","v": "bananas"}}}]}
+
 The response is a JSON object. There are exactly two keys in the response, "query" and "scope".
 The value of "scope" is determined by the top class of the Query. If the class is Objects, then the value is "item". If the class is Works, then the value is "work". If the class is People
 or Groups, then the value is "agent". If the class is Concepts, then the value is "concept". If the class is Places, then the value is "place". If the class is Activity, Event or Period, then the value is "event".
