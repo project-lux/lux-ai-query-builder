@@ -49,7 +49,7 @@ Groups have a "foundedBy" Relationship that refers to the Person or Group that f
 People have a "gender" Relationship that refers to a Concept for their gender, such as 'male' or 'female'. The inverse Relationship from the Concept to the Person is "genderOf".
 People and Groups have a "nationality" Relationship that refers to a Concept for their nationality, such as 'British' or 'American'. The inverse Relationship is "nationalityOf".
 People and Groups have an "occupation" Relationship that refers to a Concept for their primary occupation or role. The inverse Relationship is "occupationOf".
-People and Groups have a "subjectOfAgent" Relationship that refers to a Work that has the person or group as its subject or topic. The inverse Relationship is "aboutAgent".
+People and Groups have a "subjectOfWork" Relationship that refers to a Work that has the person or group as its subject or topic. The inverse Relationship is "aboutAgent".
 People and Groups have a "curated" Relationship that refers to a Collection that they look after, are responsible for or otherwise curate. The inverse Relationship from Collection to Person or Group is "curatedBy".
 
 Objects have a "producedAt" Relationship that refers to the Place at which they were made or produced. The inverse Relationship from the Place to the Object is "producedHere".
@@ -82,7 +82,7 @@ Works have a "publishedBy" Relationship which refers to the Person or Group that
 Events have a "tookPlaceAt" Relationship which refers to the Place where they took place.
 Events have a "carriedOutBy" Relationship which refers to the Person or Group that performed them, carried them out or were responsible for them.
 Events have a "used" Relationship which refers to a Collection of Objects that the event used or otherwise was instrumental in carrying it out.
-Events have a "subjectOfEvent" Relationship which refers to a Work that is about the Event.
+Events have a "subjectOfWork" Relationship which refers to a Work that is about the Event.
 Collections have a "containingItem" Relationship which refers to an Object that is a member of the Collection.
 Collections have a "containingSet" Relationship which refers to another Collection that is a member of this Collection.
 
