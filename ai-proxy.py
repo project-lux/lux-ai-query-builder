@@ -115,10 +115,10 @@ def resolve(desc):
         rjs = json.loads(resp)
         resp = list(rjs.values())[0]
         resp = resp.strip()
-    if resp[0] in ['"', '[']:
-        resp = resp[1:]
-    if resp[-1] in ['"', ']']:
-        resp = resp[:-1]
+    while resp[0] in ['"', '[']:
+        resp = resp[1:].strip()
+    while resp[-1] in ['"', ']']:
+        resp = resp[:-1].strip()
     resp = resp.strip()
 
     print(f"GOT WIKIPEDIA: {resp}")
