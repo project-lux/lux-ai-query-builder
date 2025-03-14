@@ -111,7 +111,6 @@ def resolve(desc):
     if type(resp) == list:
         resp = ''.join(resp)
     resp = resp.strip()
-
     if resp[0] == "{" and resp[-1] == "}":
         rjs = json.loads(resp)
         resp = list(rjs.values())[0]
@@ -122,8 +121,8 @@ def resolve(desc):
         resp = resp[:-1]
     resp = resp.strip()
 
+    print(f"GOT WIKIPEDIA: {resp}")
 
-    print(resp)
     if not resp.startswith('https://en.wikipedia.org/wiki/'):
         return None
     wpname = resp.replace('https://en.wikipedia.org/wiki/', '')
@@ -209,7 +208,7 @@ def test_response(q, output, attempt=1):
             query_cache.popitem()
         query_cache[q] = jstr
     elif attempt == 1:
-
+        print(f"Failed hits for {jstr}, walking")
         # No direct hits, look for `aboutConcept` and run the resolver
         walk_query(q2)
         jstr2 = json.dumps(q2)
