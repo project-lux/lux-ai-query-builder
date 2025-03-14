@@ -30,6 +30,12 @@ LUX_HOST = "https://lux.collections.yale.edu"
 with open('system-prompt.txt') as fh:
     textsi_1 = fh.read().strip()
 
+textsi_2 = """
+You are a careful and knowledgeable assistant who pays close attention to detail. You check wikipedia carefully. You only respond with URLs.
+"""
+
+wmuri = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=pageprops&ppprop=wikibase_item&redirects=1&titles={PAGENAME}"
+
 model = "gemini-2.0-flash-001"
 # model = "gemini-2.0-pro-exp-02-05"
 # model = "gemini-1.5-pro-002"
@@ -56,7 +62,29 @@ generated_config = types.GenerateContentConfig(
     system_instruction=[types.Part.from_text(text=textsi_1)],
 )
 
-def generate(prompt):
+generated_config2 = types.GenerateContentConfig(
+    temperature = 0.4,
+    top_p = 0.95,
+    max_output_tokens = 8192,
+    response_modalities = ["TEXT"],
+    safety_settings = [types.SafetySetting(
+      category="HARM_CATEGORY_HATE_SPEECH",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_DANGEROUS_CONTENT",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_HARASSMENT",
+      threshold="OFF"
+    )],
+    response_mime_type = "application/json",
+    # system_instruction=[types.Part.from_text(text=textsi_2)],
+)
+
+def generate(prompt, cfg=generated_config):
   contents = [
     types.Content(
       role="user",
@@ -69,12 +97,68 @@ def generate(prompt):
   for chunk in client.models.generate_content_stream(
     model = model,
     contents = contents,
-    config = generated_config,
+    config = cfg,
     ):
     output.append(chunk.text)
   return ''.join(output)
 
 error_q = json.dumps({"_scope": "item", "text": "ERROR"})
+
+
+def resolve(desc):
+    prompt = f"What is the most appropriate wikipedia page for the concept of {desc}? Please respond with just the URL."
+    resp = generate(prompt, cfg=generated_config2)
+    if type(resp) == list:
+        resp = ''.join(resp)
+    resp = resp.strip()
+
+    if resp[0] == "{" and resp[-1] == "}":
+        rjs = json.loads(resp)
+        resp = list(rjs.values())[0]
+        resp = resp.strip()
+    if resp[0] in ['"', '[']:
+        resp = resp[1:]
+    if resp[-1] in ['"', ']']:
+        resp = resp[:-1]
+    resp = resp.strip()
+
+
+    print(resp)
+    if not resp.startswith('https://en.wikipedia.org/wiki/'):
+        return None
+    wpname = resp.replace('https://en.wikipedia.org/wiki/', '')
+
+    try:
+        resp = requests.get(wmuri.replace("{PAGENAME}", wpname))
+        js = resp.json()
+        pgs = js['query']['pages']
+        wd = pgs[list(pgs.keys())[0]]['pageprops']['wikibase_item']
+        print(wd)
+        uri = f"http://www.wikidata.org/entity/{wd}"
+        return {'field': 'identifier', 'value': uri}
+    except Exception as e:
+        print(e)
+        return None
+
+def walk_query(query):
+    # This is the real LUX structure
+    if 'aboutConcept' in query:
+        # Trap this and send to resolver
+        if 'name' in query['aboutConcept']:
+            desc = query['aboutConcept']['name']
+            clause = resolve(desc)
+            if clause:
+                del query['aboutConcept']['name']
+                query['aboutConcept'][clause['field']] = clause['value']
+            return
+    for b in ['AND', 'OR', 'NOT']:
+        if b in query:
+            for sub in query[b]:
+                walk_query(sub)
+            return
+    for k, sub in query.items():
+        if not k.startswith('_') and type(sub) == dict:
+            walk_query(sub)
 
 def post_process(query):
     new = {}
@@ -125,7 +209,18 @@ def test_response(q, output, attempt=1):
             query_cache.popitem()
         query_cache[q] = jstr
     elif attempt == 1:
-        raise ValueError(f"No hits for {q2}")
+
+        # No direct hits, look for `aboutConcept` and run the resolver
+        walk_query(q2)
+        jstr2 = json.dumps(q2)
+        if jstr2 != jstr:
+            # At least one change
+            okay = test_hits(scope, jstr2)
+            if okay:
+                query_cache[q] = jstr2
+            return jstr2
+        else:
+            raise ValueError(f"No hits for {q2}")
     else:
         failed_query_cache[q] = jstr
     return jstr
@@ -169,6 +264,7 @@ def make_query(scope):
         jstr = test_response(q, output)
     except ValueError as e:
         print(e)
+
         output = generate(q)
         print(f"Attempt 2...")
         try:
