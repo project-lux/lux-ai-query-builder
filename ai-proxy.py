@@ -141,15 +141,16 @@ def resolve(desc):
 
 def walk_query(query):
     # This is the real LUX structure
-    if 'aboutConcept' in query:
-        # Trap this and send to resolver
-        if 'name' in query['aboutConcept']:
-            desc = query['aboutConcept']['name']
-            clause = resolve(desc)
-            if clause:
-                del query['aboutConcept']['name']
-                query['aboutConcept'][clause['field']] = clause['value']
-            return
+    for term in ['aboutConcept', 'classification']:
+        if term in query:
+            # Trap this and send to resolver
+            if 'name' in query[term] and ' ' in query[term]['name']:
+                desc = query[term]['name']
+                clause = resolve(desc)
+                if clause:
+                    del query[term]['name']
+                    query[term][clause['field']] = clause['value']
+                return
     for b in ['AND', 'OR', 'NOT']:
         if b in query:
             for sub in query[b]:
