@@ -74,11 +74,11 @@ def build_query(q):
             for e in errs:
                 print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
                 err_msg.append(f"{e.message} in /{'/'.join([str(x) for x in e.absolute_path])}")
-            txt = f"""The query generated from the javascript returned did not match the final query structure.
-The messages generated from testing the schema were:
-{"\n".join(err_msg)}
-Please try again to find a different structure for the same query.
-"""
+            errmsg = '\n'.join(err_msg)
+            txt = f"The query generated from the javascript returned did not match the final query structure.\
+The messages generated from testing the schema were:\
+{errmsg}\
+Please try again to find a different structure for the same query."
             return txt
         lux_q['_scope'] = scope
     except:
