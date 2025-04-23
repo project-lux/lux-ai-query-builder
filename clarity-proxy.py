@@ -26,27 +26,6 @@ def generate(prompt):
     resp = client.complete(session, prompt, config['agent_name'], parse_json=True)
     return resp['json']
 
-def walk_query(query):
-    # This is the real LUX structure
-    for term in ['aboutConcept', 'classification']:
-        if term in query:
-            # Trap this and send to resolver
-            if 'name' in query[term] and ' ' in query[term]['name']:
-                desc = query[term]['name']
-                clause = resolve(desc)
-                if clause:
-                    del query[term]['name']
-                    query[term][clause['field']] = clause['value']
-                return
-    for b in ['AND', 'OR', 'NOT']:
-        if b in query:
-            for sub in query[b]:
-                walk_query(sub)
-            return
-    for k, sub in query.items():
-        if not k.startswith('_') and type(sub) == dict:
-            walk_query(sub)
-
 def post_process(query):
     new = {}
     if 'p' in query:
@@ -64,47 +43,6 @@ def post_process(query):
             new['_comp'] = query['c']
     return new
 
-def test_response(q, js, attempt=1):
-
-    query = js['query']
-    scope = js['scope']
-    q2 = post_process(query)
-
-    try:
-        js3 = {"q": q2, "scope": scope}
-        errs = list(validator.iter_errors(js3))
-        if errs:
-            for e in errs:
-                print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
-            raise ValueError(f"schema validation failed for {q2}")
-        q2['_scope'] = scope
-        jstr = json.dumps(q2)
-    except:
-        raise ValueError(f"invalid json in {q2}")
-
-    # Test hits
-    okay = test_hits(scope, jstr)
-    if okay:
-        if len(query_cache) > 128:
-            query_cache.popitem()
-        query_cache[q] = jstr
-    elif attempt == 1:
-        print(f"Failed hits for {jstr}, walking")
-        # No direct hits, look for `aboutConcept` and run the resolver
-        walk_query(q2)
-        jstr2 = json.dumps(q2)
-        if jstr2 != jstr:
-            # At least one change
-            okay = test_hits(scope, jstr2)
-            if okay:
-                query_cache[q] = jstr2
-            return jstr2
-        else:
-            raise ValueError(f"No hits for {q2}")
-    else:
-        failed_query_cache[q] = jstr
-    return jstr
-
 
 def test_hits(scope, query):
     encq = quote_plus(query)
@@ -118,6 +56,45 @@ def test_hits(scope, query):
             return False
     except:
         return False
+
+
+def build_query(q):
+    js = generate(q)
+    scope = js['scope']
+    try:
+        lux_q = post_process(js['query'])
+    except:
+        return "The javascript generated does not follow the schema laid out. Please try again to find a different structure for the same query."
+
+    try:
+        js3 = {"q": lux_q, "scope": scope}
+        errs = list(validator.iter_errors(js3))
+        if errs:
+            err_msg = []
+            for e in errs:
+                print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
+                err_msg.append(f"{e.message} in /{'/'.join([str(x) for x in e.absolute_path])}")
+            txt = f"""The query generated from the javascript returned did not match the final query structure.
+The messages generated from testing the schema were:
+{"\n".join(err_msg)}
+Please try again to find a different structure for the same query.
+"""
+            return txt
+        lux_q['_scope'] = scope
+    except:
+        return "The javascript generated was not valid. Please try again."
+
+    lux_q_str = json.dumps(lux_q)
+    hits = test_hits(scope, lux_q_str)
+    if not hits:
+        return "There were no results for that query. Please can you try again to find a different structure for the same query."
+
+    # We're good
+    if len(query_cache) > 128:
+        query_cache.popitem()
+    query_cache[q] = lux_q_str
+
+    return lux_q
 
 
 # Refactor to use @functools.lru_cache
@@ -139,21 +116,13 @@ def make_query(scope):
     elif q in query_cache:
         return query_cache[q]
 
-    js = generate(q)
-    try:
-        jstr = test_response(q, js)
-    except ValueError as e:
-        print(e)
-
-        output = generate(q)
-        print(f"Attempt 2...")
-        try:
-            jstr = test_response(q, output, attempt=2)
-        except ValueError as e:
-            print(e)
-            return error_q.replace("ERROR", str(e))
-
-    print(jstr)
+    js = build_query(q)
+    if type(js) == str:
+        js = build_query(js + " " + q)
+        if type(js) == str:
+            failed_query_cache[q] = js
+            return ""
+    jstr = json.dumps(js)
     return jstr
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
@@ -162,7 +131,7 @@ def make_query_raw(scope):
     if not q:
         return ""
     output = generate(q)
-    return output
+    return json.dumps(output)
 
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
