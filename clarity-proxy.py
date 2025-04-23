@@ -126,6 +126,7 @@ def make_query(scope):
             failed_query_cache[q] = js
             return ""
     jstr = json.dumps(js)
+    print(jstr)
     return jstr
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
