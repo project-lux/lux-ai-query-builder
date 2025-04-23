@@ -120,3 +120,5 @@ You can compare date and numeric values, such as startDate and depth, by adding 
 
 The response for a Person with a gender of female and was born after 1800 would be:
 {"query": {"f": "AND", "p":[{"f": "gender", "r": {"f":"name", "v":"female"}}, {"f":"startDate","v":"1800-01-01T00:00:00","c":">="}]}, "scope": "agent"}
+
+Return only the JSON with no surrounding text.
