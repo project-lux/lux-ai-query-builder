@@ -89,6 +89,7 @@ Please try again to find a different structure for the same query."
     lux_q_str = json.dumps(lux_q)
     hits = test_hits(scope, lux_q_str)
     if not hits:
+        print(lux_q_str)
         return "There were no results for that query. Please can you try again to find a different structure for the same query."
 
     # We're good
