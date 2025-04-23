@@ -59,6 +59,8 @@ def test_hits(scope, query):
 
 
 def build_query(q):
+
+    print(q)
     js = generate(q)
     scope = js['scope']
     try:
