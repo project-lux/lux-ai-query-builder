@@ -107,10 +107,10 @@ Please try again to find a different structure for the same query."
         return "The javascript generated was not valid. Please try again."
 
     lux_q_str = json.dumps(lux_q)
-    hits = test_hits(scope, lux_q_str)
-    if not hits:
-        print(lux_q_str)
-        return "There were no results for that query. Please can you try again to find a different structure for the same query."
+    #hits = test_hits(scope, lux_q_str)
+    #if not hits:
+    #    print(lux_q_str)
+    #    return "There were no results for that query. Please can you try again to find a different structure for the same query."
 
     # We're good
     if len(query_cache) > 128:
