@@ -19,7 +19,11 @@ with open('../clarity-config.json') as fh:
 with open('../clarity-claude-config.json') as fh:
     config2 = json.load(fh)
 
+with open('../clarity-dev-config.json') as fh:
+    config3 = json.load(fh)
 
+with open('../clarity-claude-dev-config.json') as fh:
+    config4 = json.load(fh)
 
 ###
 ### NOTE WELL
@@ -38,8 +42,20 @@ client.complete("I want books about fish",  parse_json=True)
 
 client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
         api_key=config2['private_access_key'], agent_name=config2['agent_name'])
-session2 = client2.create_session("proxy-test")
+session2 = client2.create_session("proxy-test2")
 client2.complete("I want books about fish", parse_json=True)
+
+
+client3 = Clarity(base_url=config3['base_url'], instance_id=config3['instance_id'],
+        api_key=config3['private_access_key'], agent_name=config3['agent_name'])
+session3 = client3.create_session("proxy-test3")
+client3.complete("I want books about fish", parse_json=True)
+
+client4 = Clarity(base_url=config4['base_url'], instance_id=config4['instance_id'],
+        api_key=config4['private_access_key'], agent_name=config4['agent_name'])
+session4 = client4.create_session("proxy-test4")
+client4.complete("I want books about fish", parse_json=True)
+
 
 def generate(client, prompt):
     resp = client.complete(prompt, parse_json=True)
@@ -142,6 +158,12 @@ def make_query(scope):
     if q.endswith('[claude]'):
         cl = client2
         q = q.replace('[claude]', '')
+    elif q.endswith('[dev]'):
+        cl = client3
+        q = q.replace('[dev]', '')
+    elif q.endswith('[claude-dev]'):
+        cl = client4
+        q = q.replace('[claude-dev]', '')
     else:
         cl = client
 
@@ -160,8 +182,21 @@ def make_query_raw(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
-    output = generate(q)
-    return json.dumps(output)
+
+    if q.endswith('[claude]'):
+        cl = client2
+        q = q.replace('[claude]', '')
+    elif q.endswith('[dev]'):
+        cl = client3
+        q = q.replace('[dev]', '')
+    elif q.endswith('[claude-dev]'):
+        cl = client4
+        q = q.replace('[claude-dev]', '')
+    else:
+        cl = client
+
+    js = build_query(cl, q)
+    return json.dumps(js)
 
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():
@@ -171,13 +206,19 @@ def dump_cache():
     else:
         return json.dumps(query_cache)
 
-@app.route('/api/reload_system_prompt', methods=['GET'])
-def reload_system_prompt():
-    with open('system-prompt.txt') as fh:
-        textsi_1 = fh.read().strip()
+@app.route('/api/dump_cache', methods=['GET'])
+def dump_sessions():
+    which = request.args.get('model', '')
+    if which == 'claude':
+        cl = client2
+    elif which == 'dev':
+        cl = client3
+    elif which == 'claude-dev':
+        cl = client4
+    else:
+        cl = client
 
-    generated_config.system_instruction=[types.Part.from_text(text=textsi_1)]
-    return {"status": "ok"}
+    return json.dumps(cl.sessions)
 
 #if __name__ == '__main__':
 #    app.run(debug=True)
