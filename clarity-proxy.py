@@ -50,7 +50,7 @@ def test_hits(scope, query):
     try:
         resp = requests.get(url)
         js = resp.json()
-        if js['totalItems'] > 1:
+        if js['totalItems'] >= 1:
             return True
         else:
             print(f"No hits in {query}\n{js}")
