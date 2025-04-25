@@ -218,7 +218,7 @@ def dump_sessions():
     else:
         cl = client
 
-    return json.dumps([x.history for x in cl.sessions])
+    return json.dumps([x.history for x in cl.sessions.values()])
 
 #if __name__ == '__main__':
 #    app.run(debug=True)
