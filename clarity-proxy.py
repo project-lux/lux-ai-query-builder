@@ -124,9 +124,9 @@ def make_query(scope):
         js = build_query(js + " " + q)
         if type(js) == str:
             failed_query_cache[q] = js
-            return json.dumps({"_scope": "item": "name": f"ERROR for query: {js}"})
+            return json.dumps({"_scope": "item", "name": f"ERROR for query: {js}"})
     jstr = json.dumps(js)
-    print(jstr)
+    print(f"Okay: {jstr}")
     return jstr
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
