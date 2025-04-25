@@ -54,9 +54,9 @@ def test_hits(scope, query):
             return True
         else:
             return False
-    except:
+    except Exception as e:
+        print(e)
         return False
-
 
 def build_query(q):
 
