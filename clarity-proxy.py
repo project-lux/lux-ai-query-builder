@@ -124,7 +124,7 @@ def make_query(scope):
         js = build_query(js + " " + q)
         if type(js) == str:
             failed_query_cache[q] = js
-            return ""
+            return json.dumps({"_scope": "item": "name": f"ERROR for query: {js}"})
     jstr = json.dumps(js)
     print(jstr)
     return jstr
