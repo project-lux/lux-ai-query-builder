@@ -53,6 +53,7 @@ def test_hits(scope, query):
         if js['totalItems'] > 1:
             return True
         else:
+            print(f"No hits in {query}\n{js}")
             return False
     except Exception as e:
         print(e)
