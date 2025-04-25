@@ -206,7 +206,7 @@ def dump_cache():
     else:
         return json.dumps(query_cache)
 
-@app.route('/api/dump_cache', methods=['GET'])
+@app.route('/api/dump_sessions', methods=['GET'])
 def dump_sessions():
     which = request.args.get('model', '')
     if which == 'claude':
