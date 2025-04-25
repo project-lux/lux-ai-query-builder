@@ -20,13 +20,21 @@ with open('../clarity-claude-config.json') as fh:
     config2 = json.load(fh)
 
 
+
+###
+### NOTE WELL
+###
+### Before production, UI needs to send a session token
+### Then we need to generate a new session per react session
+### Otherwise, "I want my previous query" will return the previous
+### user's query in the same session
+
 LUX_HOST = "https://lux.collections.yale.edu"
 
 client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'],
         api_key=config['private_access_key'], agent_name=config['agent_name'])
 session = client.create_session("proxy-test")
 client.complete("I want books about fish",  parse_json=True)
-
 
 client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
         api_key=config2['private_access_key'], agent_name=config2['agent_name'])
@@ -133,6 +141,7 @@ def make_query(scope):
 
     if q.endswith('[claude]'):
         cl = client2
+        q = q.replace('[claude]', '')
     else:
         cl = client
 
