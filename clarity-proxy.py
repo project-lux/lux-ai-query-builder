@@ -22,12 +22,14 @@ with open('../clarity-claude-config.json') as fh:
 
 LUX_HOST = "https://lux.collections.yale.edu"
 
-client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'], api_key=config['private_access_key'], config['agent_name'])
+client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'],
+        api_key=config['private_access_key'], agent_name=config['agent_name'])
 session = client.create_session("proxy-test")
 client.complete("I want books about fish",  parse_json=True)
 
 
-client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'], api_key=config2['private_access_key'], config2['agent_name'])
+client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
+        api_key=config2['private_access_key'], agent_name=config2['agent_name'])
 session2 = client2.create_session("proxy-test")
 client2.complete("I want books about fish", parse_json=True)
 
