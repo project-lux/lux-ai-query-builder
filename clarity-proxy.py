@@ -15,15 +15,24 @@ validator = Draft202012Validator(schema)
 
 with open('../clarity-config.json') as fh:
     config = json.load(fh)
-client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'], api_key=config['private_access_key'])
+
+with open('../clarity-claude-config.json') as fh:
+    config2 = json.load(fh)
+
 
 LUX_HOST = "https://lux.collections.yale.edu"
 
+client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'], api_key=config['private_access_key'], config['agent_name'])
 session = client.create_session("proxy-test")
-preload = client.complete(session, "I want books about fish", config['agent_name'], parse_json=True)
+client.complete("I want books about fish",  parse_json=True)
 
-def generate(prompt):
-    resp = client.complete(session, prompt, config['agent_name'], parse_json=True)
+
+client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'], api_key=config2['private_access_key'], config2['agent_name'])
+session2 = client2.create_session("proxy-test")
+client2.complete("I want books about fish", parse_json=True)
+
+def generate(client, prompt):
+    resp = client.complete(prompt, parse_json=True)
     return resp['json']
 
 def post_process(query):
@@ -59,10 +68,10 @@ def test_hits(scope, query):
         print(e)
         return False
 
-def build_query(q):
+def build_query(client, q):
 
     print(q)
-    js = generate(q)
+    js = generate(client, q)
     scope = js['scope']
     try:
         lux_q = post_process(js['query'])
@@ -120,9 +129,14 @@ def make_query(scope):
     elif q in query_cache:
         return query_cache[q]
 
-    js = build_query(q)
+    if q.endswith('[claude]'):
+        cl = client2
+    else:
+        cl = client
+
+    js = build_query(cl, q)
     if type(js) == str:
-        js = build_query(js + " " + q)
+        js = build_query(cl, js + " " + q)
         if type(js) == str:
             failed_query_cache[q] = js
             return json.dumps({"_scope": "item", "name": f"ERROR for query: {js}"})
