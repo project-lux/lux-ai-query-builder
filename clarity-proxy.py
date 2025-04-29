@@ -196,7 +196,7 @@ def make_query(scope):
 
 
 @app.route('/api/translate_multi/<string:scope>', methods=['GET'])
-def make_query(scope):
+def make_query2(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
