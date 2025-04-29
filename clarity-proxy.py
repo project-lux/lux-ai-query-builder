@@ -99,10 +99,7 @@ def test_hits(scope, query):
         print(e)
         return False
 
-def build_query(client, q):
-
-    print(q)
-    js = generate(client, q)
+def process_query(js)
     scope = js['scope']
     try:
         lux_q = post_process(js['query'])
@@ -126,20 +123,29 @@ Please try again to find a different structure for the same query."
         lux_q['_scope'] = scope
     except:
         return "The javascript generated was not valid. Please try again."
+    js['query'] = lux_q
 
-    lux_q_str = json.dumps(lux_q)
-    #hits = test_hits(scope, lux_q_str)
-    #if not hits:
-    #    print(lux_q_str)
-    #    return "There were no results for that query. Please can you try again to find a different structure for the same query."
 
+def build_query(client, q):
+
+    print(q)
+    js = generate(client, q)
+    print(js)
+
+    if 'scope' in js:
+        # single query
+        process_query(js)
+        return json.dumps(js)
+    elif 'options' in query:
+        # full set of options
+        for o in query['options']:
+            js = options['q']
+            process_query(js)
     # We're good
     if len(query_cache) > 128:
         query_cache.popitem()
-    query_cache[q] = lux_q_str
-
-    return lux_q
-
+    query_cache[q] = js
+    return json.dumps(js)
 
 # Refactor to use @functools.lru_cache
 query_cache = {}
