@@ -200,8 +200,8 @@ def make_query2(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
-    elif q in query_cache:
-        return query_cache[q]
+    elif q in query_cache2:
+        return query_cache2[q]
 
     cl = client2
     js = build_query2(cl, q)
