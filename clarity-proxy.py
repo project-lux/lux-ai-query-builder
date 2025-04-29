@@ -13,8 +13,8 @@ schema = json.load(fh)
 fh.close()
 validator = Draft202012Validator(schema)
 
-#with open('../clarity-config.json') as fh:
-#    config = json.load(fh)
+with open('../clarity-config.json') as fh:
+    config = json.load(fh)
 
 #with open('../clarity-claude-config.json') as fh:
 #    config2 = json.load(fh)
@@ -23,7 +23,7 @@ validator = Draft202012Validator(schema)
 #    config3 = json.load(fh)
 
 with open('../clarity-claude-dev-config.json') as fh:
-    config = json.load(fh)
+    config2 = json.load(fh)
 
 ###
 ### NOTE WELL
@@ -40,9 +40,9 @@ client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'],
 session = client.create_session("proxy-test")
 #client.complete("I want books about fish",  parse_json=True)
 
-#client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
-#        api_key=config2['private_access_key'], agent_name=config2['agent_name'])
-#session2 = client2.create_session("proxy-test2")
+client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
+        api_key=config2['private_access_key'], agent_name=config2['agent_name'])
+session2 = client2.create_session("proxy-test2")
 #client2.complete("I want books about fish", parse_json=True)
 
 
@@ -124,31 +124,47 @@ Please try again to find a different structure for the same query."
     except:
         return "The javascript generated was not valid. Please try again."
     js['query'] = lux_q
-
+    return js
 
 def build_query(client, q):
 
     print(q)
     js = generate(client, q)
     print(js)
+    js2 = process_query(js)
+    if type(js2) == str:
+        return js2
 
-    if 'scope' in js:
-        # single query
-        process_query(js)
-        return json.dumps(js)
-    elif 'options' in js:
-        # full set of options
-        for o in js['options']:
-            js2 = o['q']
-            process_query(js2)
     # We're good
     if len(query_cache) > 128:
         query_cache.popitem()
-    query_cache[q] = js
+    query_cache[q] = json.dumps(js2)
+    return js2
+
+
+def build_query2(client, q):
+
+    print(q)
+    js = generate(client, q)
+    print(js)
+    if 'options' in js:
+        # full set of options
+        for o in js['options']:
+            js2 = o['q']
+            js3 = process_query(js2)
+            if type(js3) == str:
+                # uhoh!
+                # trash it?
+                pass
+    # We're good
+    if len(query_cache2) > 128:
+        query_cache2.popitem()
+    query_cache2[q] = js
     return js
 
 # Refactor to use @functools.lru_cache
 query_cache = {}
+query_cache2 = {}
 failed_query_cache = {}
 
 app = Flask(__name__)
@@ -166,17 +182,7 @@ def make_query(scope):
     elif q in query_cache:
         return query_cache[q]
 
-    if q.endswith('[claude]'):
-        cl = client2
-        q = q.replace('[claude]', '')
-    elif q.endswith('[dev]'):
-        cl = client3
-        q = q.replace('[dev]', '')
-    elif q.endswith('[claude-dev]'):
-        cl = client4
-        q = q.replace('[claude-dev]', '')
-    else:
-        cl = client
+    cl = client
 
     js = build_query(cl, q)
     if type(js) == str:
@@ -187,6 +193,27 @@ def make_query(scope):
     jstr = json.dumps(js)
     print(f"Okay: {jstr}")
     return jstr
+
+
+@app.route('/api/translate_multi/<string:scope>', methods=['GET'])
+def make_query(scope):
+    q = request.args.get('q', None)
+    if not q:
+        return ""
+    elif q in query_cache:
+        return query_cache[q]
+
+    cl = client2
+    js = build_query2(cl, q)
+    if type(js) == str:
+        js = build_query2(cl, js + " " + q)
+        if type(js) == str:
+            failed_query_cache[q] = js
+            return json.dumps({"_scope": "item", "name": f"ERROR for query: {js}"})
+    jstr = json.dumps(js)
+    print(f"Okay: {jstr}")
+    return jstr
+
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
 def make_query_raw(scope):
