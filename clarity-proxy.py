@@ -136,11 +136,11 @@ def build_query(client, q):
         # single query
         process_query(js)
         return json.dumps(js)
-    elif 'options' in query:
+    elif 'options' in js:
         # full set of options
-        for o in query['options']:
-            js = options['q']
-            process_query(js)
+        for o in js['options']:
+            js2 = options['q']
+            process_query(js2)
     # We're good
     if len(query_cache) > 128:
         query_cache.popitem()
