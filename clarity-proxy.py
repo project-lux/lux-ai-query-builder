@@ -99,7 +99,7 @@ def test_hits(scope, query):
         print(e)
         return False
 
-def process_query(js)
+def process_query(js):
     scope = js['scope']
     try:
         lux_q = post_process(js['query'])
