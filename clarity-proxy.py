@@ -13,17 +13,17 @@ schema = json.load(fh)
 fh.close()
 validator = Draft202012Validator(schema)
 
-with open('../clarity-config.json') as fh:
-    config = json.load(fh)
+#with open('../clarity-config.json') as fh:
+#    config = json.load(fh)
 
-with open('../clarity-claude-config.json') as fh:
-    config2 = json.load(fh)
+#with open('../clarity-claude-config.json') as fh:
+#    config2 = json.load(fh)
 
-with open('../clarity-dev-config.json') as fh:
-    config3 = json.load(fh)
+#with open('../clarity-dev-config.json') as fh:
+#    config3 = json.load(fh)
 
 with open('../clarity-claude-dev-config.json') as fh:
-    config4 = json.load(fh)
+    config = json.load(fh)
 
 ###
 ### NOTE WELL
@@ -38,23 +38,23 @@ LUX_HOST = "https://lux.collections.yale.edu"
 client = Clarity(base_url=config['base_url'], instance_id=config['instance_id'],
         api_key=config['private_access_key'], agent_name=config['agent_name'])
 session = client.create_session("proxy-test")
-client.complete("I want books about fish",  parse_json=True)
+#client.complete("I want books about fish",  parse_json=True)
 
 client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
         api_key=config2['private_access_key'], agent_name=config2['agent_name'])
 session2 = client2.create_session("proxy-test2")
-client2.complete("I want books about fish", parse_json=True)
+#client2.complete("I want books about fish", parse_json=True)
 
 
 client3 = Clarity(base_url=config3['base_url'], instance_id=config3['instance_id'],
         api_key=config3['private_access_key'], agent_name=config3['agent_name'])
 session3 = client3.create_session("proxy-test3")
-client3.complete("I want books about fish", parse_json=True)
+#client3.complete("I want books about fish", parse_json=True)
 
 client4 = Clarity(base_url=config4['base_url'], instance_id=config4['instance_id'],
         api_key=config4['private_access_key'], agent_name=config4['agent_name'])
 session4 = client4.create_session("proxy-test4")
-client4.complete("I want books about fish", parse_json=True)
+#client4.complete("I want books about fish", parse_json=True)
 
 
 def generate(client, prompt):
