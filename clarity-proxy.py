@@ -145,7 +145,7 @@ def build_query(client, q):
     if len(query_cache) > 128:
         query_cache.popitem()
     query_cache[q] = js
-    return json.dumps(js)
+    return js
 
 # Refactor to use @functools.lru_cache
 query_cache = {}
