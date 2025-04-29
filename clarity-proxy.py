@@ -59,7 +59,10 @@ client4.complete("I want books about fish", parse_json=True)
 
 def generate(client, prompt):
     resp = client.complete(prompt, parse_json=True)
-    return resp['json']
+    try:
+        return resp['json']
+    except:
+        return None
 
 def post_process(query):
     new = {}
@@ -195,7 +198,7 @@ def make_query_raw(scope):
     else:
         cl = client
 
-    js = build_query(cl, q)
+    js = generate(cl, q)
     return json.dumps(js)
 
 @app.route('/api/dump_cache', methods=['GET'])
@@ -217,7 +220,6 @@ def dump_sessions():
         cl = client4
     else:
         cl = client
-
     return json.dumps([x.history for x in cl.sessions.values()])
 
 #if __name__ == '__main__':

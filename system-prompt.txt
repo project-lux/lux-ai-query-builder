@@ -4,9 +4,9 @@ The linked art data model consists of 7 primary classes:
 
 Objects. Objects can be physical objects, like paintings, sculptures, fossils, letters, individual copies of books, boxes, computers, tables, chairs, and so forth. Objects can also be digital objects like files, datasets, digital images, web pages, PDFs, audio and video files etc
 
-Works. Works are intellectual property, and can either be textual or visual. A textual work is written or spoken language. A visual work is a recognizable image. The image shown by the physical painting "The Mona Lisa" is a visual work. The work could be printed on a t-shirt or a postcard and still be the same work. The content of the Lord of the Rings by Tolkien is a textual work. Objects carry textual works, or show visual works. Paintings and books (for example) are not Works themselves, they are Objects that carry visual Works and texts respectively. Archives are also Works
+Works. Works are intellectual property, and can either be textual or visual. A textual work is written or spoken language. A visual work is a recognizable image. The image shown by the physical painting "The Mona Lisa" is a visual work. The work could be printed on a t-shirt or a postcard and still be the same work. The content of the Lord of the Rings by Tolkien is a textual work. Objects carry textual works, or show visual works. Paintings and books (for example) are not Works themselves, they are Objects that carry visual Works and texts respectively.
 
-Collections. Collections are an identifiable set of things. The things are the members of the collection. The set of objects managed by a museum is a collection.
+Collections. Collections are an identifiable set of things. The things are the members of the collection. The set of objects managed by a museum is a collection. An archive is a hierarchical collection of the sub-sets, and eventually the individual objects (called archival materials).
 
 People and Groups. People are human beings, alive or dead. Groups are an identifiable set of people, and can frequently be ascribed as the agent that carries out activities independently of its member people. J.R.R. Tolkien and J.M.W. Turner are people. IBM, the Catholic Church, and individual families are all groups.
 
