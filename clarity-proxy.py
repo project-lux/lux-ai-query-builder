@@ -56,8 +56,8 @@ session2 = client2.create_session("proxy-test2")
 #session4 = client4.create_session("proxy-test4")
 #client4.complete("I want books about fish", parse_json=True)
 
-client2 = client3 = client4 = None
-session2 = session3 = session4 = None
+client3 = client4 = None
+session3 = session4 = None
 
 def generate(client, prompt):
     resp = client.complete(prompt, parse_json=True)
