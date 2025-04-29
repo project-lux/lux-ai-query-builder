@@ -139,7 +139,7 @@ def build_query(client, q):
     elif 'options' in js:
         # full set of options
         for o in js['options']:
-            js2 = options['q']
+            js2 = o['q']
             process_query(js2)
     # We're good
     if len(query_cache) > 128:
