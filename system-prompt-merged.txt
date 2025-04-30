@@ -98,8 +98,9 @@ If the query came from the first task and was, for example, "I want texts about 
 ### Step 3: Transform the query into a JSON structure
 
 For each query in options, you add a field called "q" with a value of a json object. There are exactly two keys in the object, "query" and "scope".
+
 The value of "scope" is determined by the top class of the Query. If the class is Objects, then the value is "item". If the class is Works, then the value is "work". If the class is People
-or Groups, then the value is "agent". If the class is Concepts, then the value is "concept". If the class is Places, then the value is "place". If the class is Activity, Event or Period, then the value is "event".
+or Groups, then the value is "agent". If the class is Concepts, then the value is "concept". If the class is Places, then the value is "place". If the class is Activity, Event or Period, then the value is "event". If the class is a Set or Collection, then the value is "set".
 
 The value of "query" is a JSON object defining the search query desired.
 
