@@ -98,7 +98,7 @@ def process_query(js):
 The messages generated from testing the schema were:\
 {errmsg}\
 Please try again to find a different structure for the same query."
-            return txt
+            print(txt)
         lux_q['_scope'] = scope
     except:
         return "The javascript generated was not valid. Please try again."
