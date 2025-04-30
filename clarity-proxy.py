@@ -140,6 +140,8 @@ def build_query2(client, q):
                 # uhoh!
                 # trash it?
                 pass
+            # pull it up a level
+            o['q'] = o['q']['query']
     # We're good
     if len(query_cache2) > 128:
         query_cache2.popitem()
