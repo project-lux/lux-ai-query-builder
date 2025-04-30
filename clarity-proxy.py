@@ -3,6 +3,7 @@ import json
 import requests
 import functools
 from urllib.parse import quote_plus
+import copy
 
 from clarity import Clarity
 
@@ -139,7 +140,7 @@ def build_query2(client, q):
             if type(js3) == str:
                 # uhoh!
                 # trash it?
-                pass
+                return js3
             # pull it up a level
             o['q'] = o['q']['query']
     # We're good
@@ -147,6 +148,24 @@ def build_query2(client, q):
         query_cache2.popitem()
     query_cache2[q] = js
     return js
+
+
+
+def fetch_records(scope, query):
+    encq = quote_plus(query)
+    url = f"{LUX_HOST}/api/search/{scope}?q={encq}"
+    try:
+        resp = requests.get(url)
+        js = resp.json()
+        if js['totalItems'] >= 1:
+            return js
+        else:
+            print(f"No hits in {query}\n{js}")
+            return False
+    except Exception as e:
+        print(e)
+        return False
+
 
 # Refactor to use @functools.lru_cache
 query_cache = {}
@@ -201,26 +220,35 @@ def make_query2(scope):
     return jstr
 
 
+@app.route('/api/rag/', methods=['GET'])
+def rag_query():
+    q = request.args.get('q', None)
+    if not q:
+        return ""
+    js = build_query2(cl, q)
+    if type(js) == str:
+        js = build_query2(cl, js + " " + q)
+        if type(js) == str:
+            failed_query_cache[q] = js
+            return "Could not create a database query for that"
+    q = js['options'][0]['q']
+    # Execute the query and fetch the first 10 hits
+    rq = copy.deepcopy(q)
+    del rq['_scope']
+    recs = fetch_records(q['_scope'], rq)
+
+
+
+
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
 def make_query_raw(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
-
-    if q.endswith('[claude]'):
-        cl = client2
-        q = q.replace('[claude]', '')
-    elif q.endswith('[dev]'):
-        cl = client3
-        q = q.replace('[dev]', '')
-    elif q.endswith('[claude-dev]'):
-        cl = client4
-        q = q.replace('[claude-dev]', '')
-    else:
-        cl = client
-
+    cl = client
     js = generate(cl, q)
     return json.dumps(js)
+
 
 @app.route('/api/dump_cache', methods=['GET'])
 def dump_cache():

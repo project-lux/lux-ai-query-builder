@@ -134,7 +134,9 @@ The query is then added to each option in the response.
             "parsed": "I want (books about [agile in the sense of software engineering])",
             "rewritten": "I want books about agile in the sense of software engineering",
             "q": {
-                "query": {},
+                "query": {
+                    // the query would be here
+                },
                 "scope": "item"
             }
             "likelihood": 1.0
