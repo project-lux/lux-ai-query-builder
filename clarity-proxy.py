@@ -20,6 +20,10 @@ with open('../clarity-config.json') as fh:
 with open('../clarity-claude-dev-config.json') as fh:
     config2 = json.load(fh)
 
+with open('../clarity-dev-config.json') as fh:
+    config3 = json.load(fh)
+
+
 ###
 ### NOTE WELL
 ###
@@ -36,6 +40,10 @@ session = client.create_session("proxy-test")
 client2 = Clarity(base_url=config2['base_url'], instance_id=config2['instance_id'],
         api_key=config2['private_access_key'], agent_name=config2['agent_name'])
 session2 = client2.create_session("proxy-test2")
+
+client3 = Clarity(base_url=config3['base_url'], instance_id=config3['instance_id'],
+        api_key=config3['private_access_key'], agent_name=config3['agent_name'])
+session3 = client3.create_session("proxy-test3")
 
 
 def generate(client, prompt):
@@ -150,21 +158,29 @@ def build_query2(client, q):
     return js
 
 
-
 def fetch_records(scope, query):
     encq = quote_plus(query)
     url = f"{LUX_HOST}/api/search/{scope}?q={encq}"
     try:
         resp = requests.get(url)
         js = resp.json()
+        recs = []
         if js['totalItems'] >= 1:
-            return js
+            for u in js['orderedItems']:
+                r2 = requests.get(u['id'])
+                rjs = r2.json()
+                if rjs is not None:
+                    try:
+                        del rjs['_links']
+                    except:
+                        pass
+                    recs.append(rjs)
         else:
             print(f"No hits in {query}\n{js}")
-            return False
+        return recs
     except Exception as e:
         print(e)
-        return False
+        return None
 
 
 # Refactor to use @functools.lru_cache
@@ -236,7 +252,19 @@ def rag_query():
     rq = copy.deepcopy(q)
     del rq['_scope']
     recs = fetch_records(q['_scope'], rq)
+    if recs:
+        # send to AI as context for original question.
+        query = []
+        query.append(f"The user asked: {q}")
+        query.append(f"You generated this query to try and answer it: {js['options'][0]['rewritten']}")
+        query.append(f"The answers from the database are the following records in Linked Art JSON:")
+        for r in recs:
+            query.append(json.dumps(r))
+        query.append("Using these records, please answer the user's original question")
+        qstr = "\n".join(query)
 
+    r = client3.complete(prompt)
+    return r
 
 
 

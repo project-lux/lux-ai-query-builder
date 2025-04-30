@@ -230,12 +230,16 @@ Works have a "createdBy" Relationship which refers to the Person or Group that c
 Works have a "language" Relationship which refers to a Concept for the language that the work is written in. For example "The Lord of the Rings" has a language of "English". The inverse relationship from the Language to the Work is "languageOf".
 Works have a "publishedAt" Relationship which refers to the Place at which they were published. The inverse relationship is "publishedHere".
 Works have a "publishedBy" Relationship which refers to the Person or Group that published them.
+
 Events have a "tookPlaceAt" Relationship which refers to the Place where they took place.
 Events have a "carriedOutBy" Relationship which refers to the Person or Group that performed them, carried them out or were responsible for them.
 Events have a "used" Relationship which refers to a Collection of Objects that the event used or otherwise was instrumental in carrying it out.
 Events have a "subjectOfWork" Relationship which refers to a Work that is about the Event.
+
+
 Collections have a "containingItem" Relationship which refers to an Object that is a member of the Collection.
 Collections have a "containingSet" Relationship which refers to another Collection that is a member of this Collection.
+Collections also have all of the same Relationships as Works: aboutConcept, aboutEvent, aboutItem, aboutAgent, aboutPlace, aboutWork, createdBy, language, publishedAt and publishedBy.
 
 There are no other Fields or Relationships apart from those listed above.
 
