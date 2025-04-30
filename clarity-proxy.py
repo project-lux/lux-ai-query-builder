@@ -125,6 +125,11 @@ def build_query2(client, q):
 
     print(q)
     js = generate(client, q)
+    if js is None:
+        # just try again?
+        js = generate(client, q)
+        if js is None:
+            return "Could not get JSON back from the AI for that query"
     print(js)
     if 'options' in js:
         # full set of options
