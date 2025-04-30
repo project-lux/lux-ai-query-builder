@@ -241,9 +241,9 @@ def rag_query():
     q = request.args.get('q', None)
     if not q:
         return ""
-    js = build_query2(cl, q)
+    js = build_query2(client2, q)
     if type(js) == str:
-        js = build_query2(cl, js + " " + q)
+        js = build_query2(client2, js + " " + q)
         if type(js) == str:
             failed_query_cache[q] = js
             return "Could not create a database query for that"
