@@ -299,5 +299,5 @@ def dump_sessions():
         cl = client
     return json.dumps([x.history for x in cl.sessions.values()])
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, ssl_context='adhoc', port=8080, host='0.0.0.0')
