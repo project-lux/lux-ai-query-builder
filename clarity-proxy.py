@@ -203,7 +203,7 @@ def make_query(scope):
     elif q in query_cache:
         return query_cache[q]
 
-    cl = client
+    cl = client2
 
     js = build_query(cl, q)
     if type(js) == str:
