@@ -166,7 +166,7 @@ def fetch_records(scope, query):
         js = resp.json()
         recs = []
         print(js)
-        if js['totalItems'] >= 1:
+        if 'orderedItems' in js:
             for u in js['orderedItems']:
                 r2 = requests.get(u['id'])
                 rjs = r2.json()
