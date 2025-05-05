@@ -251,7 +251,8 @@ def rag_query():
     # Execute the query and fetch the first 10 hits
     rq = copy.deepcopy(q)
     del rq['_scope']
-    recs = fetch_records(q['_scope'], rq)
+    rqstr = json.dumps(rq)
+    recs = fetch_records(q['_scope'], rqstr)
     if recs:
         # send to AI as context for original question.
         query = []
