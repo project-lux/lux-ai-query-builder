@@ -165,6 +165,7 @@ def fetch_records(scope, query):
         resp = requests.get(url)
         js = resp.json()
         recs = []
+        print(js)
         if js['totalItems'] >= 1:
             for u in js['orderedItems']:
                 r2 = requests.get(u['id'])
@@ -179,6 +180,7 @@ def fetch_records(scope, query):
             print(f"No hits in {query}\n{js}")
         return recs
     except Exception as e:
+        print("fetch records broke...")
         print(e)
         return None
 
