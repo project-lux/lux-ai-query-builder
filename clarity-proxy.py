@@ -262,9 +262,10 @@ def rag_query():
         for r in recs:
             query.append(json.dumps(r))
         query.append("Using these records, please answer the user's original question")
-        qstr = "\n".join(query)
-
-    r = client3.complete(prompt)
+        prompt = "\n".join(query)
+        r = client3.complete(prompt)
+    else:
+        r = "Could not find any records to help answer that query"
     return r
 
 
