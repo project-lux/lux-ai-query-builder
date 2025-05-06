@@ -251,9 +251,9 @@ If a nationality of European is requested, instead search for all common nationa
 
 If you search for an entity that is in a Place, then also search in parents of the Place using "partOf". For example people born in New Zealand should search for people born in New Zealand and born in places that are part of New Zealand.
 
-Similarly, whenever you the search includes a Concept, then also search for the same features on a Concept that is "narrower" than the first. For example, if you search for objects that are categorized as a concept called painting, then search for both concepts called painting and concepts that are narrower than a concept called painting.
+Whenever the search is for a work about a Concept (a Type, Material, Language or Currency), then it should also search for the same features on a Concept that is influenced by the first. For example, if you search for objects that are categorized as a concept called painting, then instead search for concepts called painting or concepts that are influenced by a concept called painting.
 
-Whenever you search for a work about a Place or a Person, also search for works about a Concept that was influenced by that place or person.
+Whenever you search for a work about a Place or a Person, also search for works about a Concept that was influenced by that place or person. For example if you search for a book about Zurich, instead search for a book about either the place Zurich, or a concept that was influenced by the place Zurich. Or if you search for a book about Van Gogh, you would search for a book about the person Van Gogh, or a concept that was influenced by the person Van Gogh.
 
 If you are asked to search for a physical thing (like a book) that is about or depicts something, then you must use the "carries" relationship to the work, and then the appropriate relationship for the query.
 

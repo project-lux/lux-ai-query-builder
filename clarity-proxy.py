@@ -1,13 +1,36 @@
+
+
 from flask import Flask, request, redirect, make_response
 import json
 import requests
-import functools
 from urllib.parse import quote_plus
 import copy
 
-from clarity import Clarity
 
+import weaviate
+from weaviate.classes.config import Property, DataType, Configure, VectorDistances
+from weaviate.classes.query import Filter, MetadataQuery
+from weaviate.classes.init import Auth
+
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
+
+from clarity import Clarity
 from jsonschema import Draft202012Validator
+
+
+###
+### NOTE WELL
+###
+### Before production, UI needs to send a session token
+### Then we need to generate a new session per react session
+### Otherwise, "I want my previous query" will return the previous
+### user's query in the same session
+
+### OR... just turn off all memory
+
+
+
 schemafn = "generated_schema.json"
 fh = open(schemafn)
 schema = json.load(fh)
@@ -23,14 +46,8 @@ with open('../clarity-claude-dev-config.json') as fh:
 with open('../clarity-dev-config.json') as fh:
     config3 = json.load(fh)
 
-
-###
-### NOTE WELL
-###
-### Before production, UI needs to send a session token
-### Then we need to generate a new session per react session
-### Otherwise, "I want my previous query" will return the previous
-### user's query in the same session
+WEAVIATE_URL = config2.get('weaviate_url', '')
+WEAVIATE_KEY = config2.get('weaviate_key', '')
 
 LUX_HOST = "https://lux.collections.yale.edu"
 
@@ -46,6 +63,36 @@ client3 = Clarity(base_url=config3['base_url'], instance_id=config3['instance_id
 session3 = client3.create_session("proxy-test3")
 
 
+if not WEAVIATE_KEY:
+    weave = weaviate.connect_to_custom(url=WEAVIATE_URL)
+else:
+    weave = weaviate.connect_to_weaviate_cloud(
+        cluster_url=WEAVIATE_URL,
+        auth_credentials=Auth.api_key(WEAVIATE_KEY))
+embed_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+scopes = {}
+all_scopes = ['place', 'event', 'set', 'item', 'work', 'agent', 'concept']
+r = requests.get(f"{LUX_HOST}/api/advanced-search-config")
+asc = r.json()['terms']
+for (sc,tms) in asc.items():
+    scopes[sc] = {}
+    for (k,v) in tms.items():
+        if v['relation'] in all_scopes:
+            scopes[sc][k] = v['relation']
+
+scope_class = {
+    'place': ['place'],
+    'agent': ['person', 'group'],
+    'concept': ['type'],
+    'event': ['event'],
+    'item': ['HumanMadeObject'],
+    'work': ['LinguisticObject'],
+    'set': ['Set']
+}
+
+##### Functions
+
 def generate(client, prompt):
     resp = client.complete(prompt, parse_json=True)
     try:
@@ -53,14 +100,45 @@ def generate(client, prompt):
     except:
         return None
 
-def post_process(query):
+def vector_search(query, types=None, limit=6):
+
+    query_vector = embed_model.encode(query).tolist()
+    collection = weave.collections.get("WikidataArticle")
+
+    # Create filter for classes if specified
+    if types:
+        filters = Filter.by_property("classes").contains_any(types)
+    else:
+        filters = None
+    results = collection.query.near_vector(
+        near_vector=query_vector,
+        filters=filters,
+        limit=limit,
+        return_metadata=MetadataQuery(distance=True),
+        return_properties=["wd_id", "wp_title", "wp_text", "classes"]
+    )
+
+    return results.objects
+
+def post_process(query, scope=None):
     new = {}
     if 'p' in query:
         # BOOL
-        new[query['f']] = [post_process(x) for x in query['p']]
+        new[query['f']] = [post_process(x, scope) for x in query['p']]
     elif 'r' in query:
-        new[query['f']] = post_process(query['r'])
+        # Change scope
+        scope = scopes[scope].get(query['f'], scope)
+        new[query['f']] = post_process(query['r'], scope)
     else:
+        if 'd' in query:
+            print(f"SAW 'd' in {query}")
+            # This is where we reach out to the vector DB
+            results = vector_search(query['v'], types=scope_class.get(scope, []))
+            # for now, turn it into an identifier search
+            wd_id = results[0].properties['wd_id']
+            new['identifier'] = f"http://www.wikidata.org/entity/{wd_id}"
+            return new
+
         if query['f'] in ['height', 'width', 'depth', 'dimension']:
             query['v'] = float(query['v'])
         elif query['f'] in ['hasDigitalImage']:
@@ -89,7 +167,7 @@ def test_hits(scope, query):
 def process_query(js):
     scope = js['scope']
     try:
-        lux_q = post_process(js['query'])
+        lux_q = post_process(js['query'], scope)
     except:
         return "The javascript generated does not follow the schema laid out. Please try again to find a different structure for the same query."
 
@@ -113,7 +191,7 @@ Please try again to find a different structure for the same query."
     js['query'] = lux_q
     return js
 
-def build_query(client, q):
+def build_query_single(client, q):
 
     print(q)
     js = generate(client, q)
@@ -121,7 +199,6 @@ def build_query(client, q):
     js2 = process_query(js)
     if type(js2) == str:
         return js2
-
     js2 = js2['query']
     # We're good
     if len(query_cache) > 128:
@@ -130,8 +207,7 @@ def build_query(client, q):
     return js2
 
 
-def build_query2(client, q):
-
+def build_query_multi(client, q):
     print(q)
     js = generate(client, q)
     if js is None:
@@ -158,31 +234,7 @@ def build_query2(client, q):
     return js
 
 
-def fetch_records(scope, query):
-    encq = quote_plus(query)
-    url = f"{LUX_HOST}/api/search/{scope}?q={encq}"
-    try:
-        resp = requests.get(url)
-        js = resp.json()
-        recs = []
-        print(js)
-        if 'orderedItems' in js:
-            for u in js['orderedItems']:
-                r2 = requests.get(u['id'])
-                rjs = r2.json()
-                if rjs is not None:
-                    try:
-                        del rjs['_links']
-                    except:
-                        pass
-                    recs.append(rjs)
-        else:
-            print(f"No hits in {query}\n{js}")
-        return recs
-    except Exception as e:
-        print("fetch records broke...")
-        print(e)
-        return None
+##### FLASK from here on down
 
 
 # Refactor to use @functools.lru_cache
@@ -198,7 +250,7 @@ def add_cors(response):
     return response
 
 @app.route('/api/translate/<string:scope>', methods=['GET'])
-def make_query(scope):
+def make_query_single(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
@@ -206,8 +258,7 @@ def make_query(scope):
         return query_cache[q]
 
     cl = client
-
-    js = build_query(cl, q)
+    js = build_query_single(cl, q)
     if type(js) == str:
         js = build_query(cl, js + " " + q)
         if type(js) == str:
@@ -219,7 +270,7 @@ def make_query(scope):
 
 
 @app.route('/api/translate_multi/<string:scope>', methods=['GET'])
-def make_query2(scope):
+def make_query_multi(scope):
     q = request.args.get('q', None)
     if not q:
         return ""
@@ -227,7 +278,7 @@ def make_query2(scope):
         return query_cache2[q]
 
     cl = client2
-    js = build_query2(cl, q)
+    js = build_query_multi(cl, q)
     if type(js) == str:
         js = build_query2(cl, js + " " + q)
         if type(js) == str:
@@ -236,40 +287,6 @@ def make_query2(scope):
     jstr = json.dumps(js)
     print(f"Okay: {jstr}")
     return jstr
-
-
-@app.route('/api/rag/', methods=['GET'])
-def rag_query():
-    q = request.args.get('q', None)
-    if not q:
-        return ""
-    js = build_query2(client2, q)
-    if type(js) == str:
-        js = build_query2(client2, js + " " + q)
-        if type(js) == str:
-            failed_query_cache[q] = js
-            return "Could not create a database query for that"
-    q = js['options'][0]['q']
-    # Execute the query and fetch the first 10 hits
-    rq = copy.deepcopy(q)
-    del rq['_scope']
-    rqstr = json.dumps(rq)
-    recs = fetch_records(q['_scope'], rqstr)
-    if recs:
-        # send to AI as context for original question.
-        query = []
-        query.append(f"The user asked: {q}")
-        query.append(f"You generated this query to try and answer it: {js['options'][0]['rewritten']}")
-        query.append(f"The answers from the database are the following records in Linked Art JSON:")
-        for r in recs:
-            query.append(json.dumps(r))
-        query.append("Using these records, please answer the user's original question")
-        prompt = "\n".join(query)
-        r = client3.complete(prompt)
-    else:
-        r = "Could not find any records to help answer that query"
-    return r
-
 
 
 @app.route('/api/translate_raw/<string:scope>', methods=['GET'])
@@ -289,19 +306,6 @@ def dump_cache():
         return json.dumps(failed_query_cache)
     else:
         return json.dumps(query_cache)
-
-@app.route('/api/dump_sessions', methods=['GET'])
-def dump_sessions():
-    which = request.args.get('model', '')
-    if which == 'claude':
-        cl = client2
-    elif which == 'dev':
-        cl = client3
-    elif which == 'claude-dev':
-        cl = client4
-    else:
-        cl = client
-    return json.dumps([x.history for x in cl.sessions.values()])
 
 if __name__ == '__main__':
     app.run(debug=True, port=8443, host='0.0.0.0', ssl_context='adhoc')
