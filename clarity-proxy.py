@@ -160,8 +160,8 @@ def post_process(query, scope=None):
                 rids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
                 ids.extend(rids)
 
-            new['AND'] = [{'id': x} for x in ids]
-            new['AND'].append({'text': query['v']})
+            new['OR'] = [{'id': x} for x in ids]
+            new['OR'].append({'text': query['v']})
             return new
 
         if query['f'] in ['height', 'width', 'depth', 'dimension']:
