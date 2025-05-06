@@ -100,6 +100,23 @@ def generate(client, prompt):
     except:
         return None
 
+def lux_search(scope, query):
+    qstr = json.dumps(query)
+    encq = quote_plus(qstr)
+    url = f"{LUX_HOST}/api/search/{scope}?q={encq}"
+    try:
+        resp = requests.get(url)
+        js = resp.json()
+        recs = []
+        if 'orderedItems' in js:
+            return [x['id'] for x in js['orderedItems']]
+        else:
+            return []
+    except Exception as e:
+        print("fetch records broke...")
+        print(e)
+        return []
+
 def vector_search(query, types=None, limit=6):
 
     query_vector = embed_model.encode(query).tolist()
@@ -135,8 +152,11 @@ def post_process(query, scope=None):
             # This is where we reach out to the vector DB
             results = vector_search(query['v'], types=scope_class.get(scope, []))
             # for now, turn it into an identifier search
+
+            # replace with LUX ids
             wd_id = results[0].properties['wd_id']
-            new['identifier'] = f"http://www.wikidata.org/entity/{wd_id}"
+            ids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
+            new['id'] = ids[0]
             return new
 
         if query['f'] in ['height', 'width', 'depth', 'dimension']:
