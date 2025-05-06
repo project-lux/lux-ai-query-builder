@@ -156,7 +156,7 @@ def post_process(query, scope=None):
             ids = []
             for r in results:
                 # replace with LUX ids
-                wd_id = results[0].properties['wd_id']
+                wd_id = r.properties['wd_id']
                 rids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
                 ids.extend(rids)
 
