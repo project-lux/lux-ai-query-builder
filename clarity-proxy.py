@@ -117,7 +117,7 @@ def lux_search(scope, query):
         print(e)
         return []
 
-def vector_search(query, types=None, limit=6):
+def vector_search(query, types=None, limit=3):
 
     query_vector = embed_model.encode(query).tolist()
     collection = weave.collections.get("WikidataArticle")
@@ -153,10 +153,15 @@ def post_process(query, scope=None):
             results = vector_search(query['v'], types=scope_class.get(scope, []))
             # for now, turn it into an identifier search
 
-            # replace with LUX ids
-            wd_id = results[0].properties['wd_id']
-            ids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
-            new['id'] = ids[0]
+            ids = []
+            for r in results:
+                # replace with LUX ids
+                wd_id = results[0].properties['wd_id']
+                rids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
+                ids.extend(rids)
+
+            new['AND'] = [{'id': x} for x in ids]
+            new['AND'].append({'text': query['v']})
             return new
 
         if query['f'] in ['height', 'width', 'depth', 'dimension']:
