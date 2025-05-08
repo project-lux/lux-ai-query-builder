@@ -18,13 +18,14 @@ from vertexai.generative_models import GenerativeModel, Part
 from google import genai
 from google.genai import types
 
-# from jsonschema import Draft202012Validator
-# schemafn = "generated_schema.json"
-# fh = open(schemafn)
-# schema = json.load(fh)
-# fh.close()
-# validator = Draft202012Validator(schema)
-validator = None
+from jsonschema import Draft202012Validator
+
+schemafn = "generated_schema.json"
+fh = open(schemafn)
+schema = json.load(fh)
+fh.close()
+validator = Draft202012Validator(schema)
+# validator = None
 
 ###
 ### NOTE WELL
