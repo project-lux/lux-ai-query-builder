@@ -16,7 +16,7 @@ The keys and type of value for the JSON response are:
 The entries in the "options" array have the structure:
   * "parsed": string
   * "rewritten": string
-  * "js": json object
+  * "q": json object
   * "likelihood": float
 
 The json object in "query" has two top level keys:
