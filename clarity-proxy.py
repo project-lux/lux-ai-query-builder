@@ -98,7 +98,6 @@ gemini = genai.Client(
     location="us-central1",
 )
 
-
 scopes = {}
 all_scopes = ["place", "event", "set", "item", "work", "agent", "concept"]
 r = requests.get(f"{LUX_HOST}/api/advanced-search-config")
@@ -142,7 +141,14 @@ def generate_gemini(prompt):
         config=cfg,
     ):
         output.append(chunk.text)
-    return "".join(output)
+    jstr = "".join(output)
+    try:
+        js = json.loads(jstr)
+        return js
+    except Exception as e:
+        print(jstr)
+        sys.stdout.flush()
+        return None
 
 
 def lux_search(scope, query):
