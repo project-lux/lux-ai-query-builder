@@ -245,7 +245,7 @@ def process_query(js):
     scope = js["scope"]
     try:
         lux_q = post_process(js["query"], scope)
-    except:
+    except Exception as e:
         return "The javascript generated does not follow the schema laid out. Please try again to find a different structure for the same query."
 
     if validator is not None:
@@ -264,7 +264,7 @@ def process_query(js):
     Please try again to find a different structure for the same query."
                 print(txt)
             lux_q["_scope"] = scope
-        except:
+        except Exception as e:
             return "The javascript generated was not valid. Please try again."
     js["query"] = lux_q
     return js
@@ -324,8 +324,10 @@ def make_query_multi(scope):
 
     if q.startswith("!"):
         cl = "gemini"
+        q = q[1:]
     elif q.startswith("@"):
         cl = client
+        q = q[1:]
     else:
         cl = client2
 
