@@ -24,7 +24,7 @@ from google.genai import types
 # schema = json.load(fh)
 # fh.close()
 # validator = Draft202012Validator(schema)
-
+validator = None
 
 ###
 ### NOTE WELL
@@ -248,24 +248,24 @@ def process_query(js):
     except:
         return "The javascript generated does not follow the schema laid out. Please try again to find a different structure for the same query."
 
-    try:
-        js3 = {"q": lux_q, "scope": scope}
-        errs = list(validator.iter_errors(js3))
-        if errs:
-            err_msg = []
-            for e in errs:
-                print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
-                err_msg.append(f"{e.message} in /{'/'.join([str(x) for x in e.absolute_path])}")
-            errmsg = "\n".join(err_msg)
-            txt = f"The query generated from the javascript returned did not match the final query structure.\
-The messages generated from testing the schema were:\
-{errmsg}\
-Please try again to find a different structure for the same query."
-            print(txt)
-        lux_q["_scope"] = scope
-    except:
-        raise
-        return "The javascript generated was not valid. Please try again."
+    if validator is not None:
+        try:
+            js3 = {"q": lux_q, "scope": scope}
+            errs = list(validator.iter_errors(js3))
+            if errs:
+                err_msg = []
+                for e in errs:
+                    print(f"  /{'/'.join([str(x) for x in e.absolute_path])} --> {e.message} ")
+                    err_msg.append(f"{e.message} in /{'/'.join([str(x) for x in e.absolute_path])}")
+                errmsg = "\n".join(err_msg)
+                txt = f"The query generated from the javascript returned did not match the final query structure.\
+    The messages generated from testing the schema were:\
+    {errmsg}\
+    Please try again to find a different structure for the same query."
+                print(txt)
+            lux_q["_scope"] = scope
+        except:
+            return "The javascript generated was not valid. Please try again."
     js["query"] = lux_q
     return js
 
@@ -368,4 +368,4 @@ def dump_cache():
 
 if __name__ == "__main__":
     if "i" not in sys.argv:
-        app.run(debug=False, port=8443, host="0.0.0.0", ssl_context="adhoc")
+        app.run(debug=True, port=8443, host="0.0.0.0", ssl_context="adhoc")
