@@ -40,7 +40,7 @@ with open("../clarity-config.json") as fh:
     config = json.load(fh)
 
 # Claude 3.5
-with open("../clarity-claude-dev-config.json") as fh:
+with open("../clarity-claude-config.json") as fh:
     config2 = json.load(fh)
 
 WEAVIATE_URL = config2.get("weaviate_url", "")
