@@ -264,6 +264,7 @@ Please try again to find a different structure for the same query."
             print(txt)
         lux_q["_scope"] = scope
     except:
+        raise
         return "The javascript generated was not valid. Please try again."
     js["query"] = lux_q
     return js
