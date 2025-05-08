@@ -1,9 +1,9 @@
 import sys
-from flask import Flask, request, redirect, make_response
+from flask import Flask, request
 import json
 import requests
 from urllib.parse import quote_plus
-import time
+
 
 import weaviate
 from weaviate.classes.query import Filter, MetadataQuery
@@ -158,7 +158,7 @@ def lux_search(scope, query):
     try:
         resp = requests.get(url)
         js = resp.json()
-        recs = []
+
         if "orderedItems" in js:
             return [x["id"] for x in js["orderedItems"]]
         else:
@@ -291,9 +291,9 @@ def build_query_multi(client, q):
             # pull it up a level
             o["q"] = o["q"]["query"]
     # We're good
-    if len(query_cache2) > 128:
-        query_cache2.popitem()
-    query_cache2[q] = js
+    if len(query_cache) > 128:
+        query_cache.popitem()
+    query_cache[q] = js
     return js
 
 
