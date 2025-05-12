@@ -292,8 +292,9 @@ def build_query_multi(client, q):
                 # trash it?
                 return js3
             # pull it up a level
-            o["_scope"] = o["q"]["scope"]
+            scope = o["q"]["scope"]
             o["q"] = o["q"]["query"]
+            o["q"]["_scope"] = scope
     # We're good
     if len(query_cache) > 128:
         query_cache.popitem()
