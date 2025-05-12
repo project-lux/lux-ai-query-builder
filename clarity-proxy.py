@@ -24,8 +24,8 @@ schemafn = "generated_schema.json"
 fh = open(schemafn)
 schema = json.load(fh)
 fh.close()
-# validator = Draft202012Validator(schema)
-validator = None
+validator = Draft202012Validator(schema)
+# validator = None
 
 ###
 ### NOTE WELL
