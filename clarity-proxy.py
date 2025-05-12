@@ -24,8 +24,8 @@ schemafn = "generated_schema.json"
 fh = open(schemafn)
 schema = json.load(fh)
 fh.close()
-validator = Draft202012Validator(schema)
-# validator = None
+# validator = Draft202012Validator(schema)
+validator = None
 
 ###
 ### NOTE WELL
@@ -170,7 +170,7 @@ def lux_search(scope, query):
         return []
 
 
-def vector_search(query, types=None, limit=3):
+def vector_search(query, types=None, limit=5):
     query_vector = embed_model.encode(query).tolist()
     collection = weave.collections.get("WikidataArticle")
 
@@ -184,7 +184,7 @@ def vector_search(query, types=None, limit=3):
         filters=filters,
         limit=limit,
         return_metadata=MetadataQuery(distance=True),
-        return_properties=["wd_id", "wp_title", "wp_text", "classes"],
+        return_properties=["wd_id", "wp_title", "classes"],
     )
     return results.objects
 
@@ -208,12 +208,13 @@ def post_process(query, scope=None):
             ids = []
             for r in results:
                 # replace with LUX ids
-                wd_id = r.properties["wd_id"]
-                rids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
-                ids.extend(rids)
+                print(f"{r.properties['wp_title']} = {r.metadata.distance}")
+                if not ids or r.metadata.distance < 0.4:
+                    wd_id = r.properties["wd_id"]
+                    rids = lux_search(scope, {"identifier": f"http://www.wikidata.org/entity/{wd_id}"})
+                    ids.extend(rids)
 
             new["OR"] = [{"id": x} for x in ids]
-            new["OR"].append({"name": query["v"]})
             return new
 
         if query["f"] in ["height", "width", "depth", "dimension"]:
@@ -247,6 +248,7 @@ def process_query(js):
     try:
         lux_q = post_process(js["query"], scope)
     except Exception as e:
+        raise e
         return "The javascript generated does not follow the schema laid out. Please try again to find a different structure for the same query."
 
     if validator is not None:
