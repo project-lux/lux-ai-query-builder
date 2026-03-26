@@ -90,7 +90,7 @@ def post_process(query, scope=None):
         scope = scopes[scope].get(query["f"], scope)
         new[query["f"]] = post_process(query["r"], scope)
     else:
-        if "d" in query and query["d"]:
+        if False and "d" in query and query["d"]:
             print(f"SAW 'd' in {query}")
 
             # This is where we reach out RAG style
