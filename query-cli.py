@@ -14,7 +14,11 @@ LUX_HOST = "https://lux.collections.yale.edu"
 with open("system-prompt-merged-short.txt") as fh:
     system_prompt = fh.read().strip()
 
-gemini_model = "gemini-3-flash-preview"
+with open("system-prompt-improve.txt") as fh:
+    system_prompt_improve = fh.read().strip()
+
+
+gemini_model = "gemini-3.1-flash-lite"
 generated_config = types.GenerateContentConfig(
     temperature=0.8,
     top_p=0.95,
@@ -31,15 +35,33 @@ generated_config = types.GenerateContentConfig(
     system_instruction=[types.Part.from_text(text=system_prompt)],
 )
 
+config_improve = types.GenerateContentConfig(
+    temperature=0.8,
+    top_p=0.95,
+    max_output_tokens=36000,
+    response_modalities=["TEXT"],
+    safety_settings=[
+        types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
+        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"),
+        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"),
+        types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="OFF"),
+    ],
+    response_mime_type="application/json",
+    thinking_config=types.ThinkingConfig(thinking_budget=2000),
+    system_instruction=[types.Part.from_text(text=system_prompt_improve)],
+)
+
 gemini = genai.Client(
     vertexai=True,
     project=gcp_name,
     location="global",
 )
 
+
 scopes = {}
 all_scopes = ["place", "event", "set", "item", "work", "agent", "concept"]
 r = requests.get(f"{LUX_HOST}/api/advanced-search-config")
+
 asc = r.json()["terms"]
 for sc, tms in asc.items():
     scopes[sc] = {}
@@ -60,10 +82,10 @@ uri_scopes = {
 ##### Functions
 
 
-def generate_gemini(prompt):
+def generate_gemini(prompt, which="build"):
     contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
     output = []
-    cfg = generated_config
+    cfg = generated_config if which == "build" else config_improve
     for chunk in gemini.models.generate_content_stream(
         model=gemini_model,
         contents=contents,
@@ -126,16 +148,23 @@ def process_js(js):
             print(json.dumps(lq, indent=2))
             qstr = quote_plus(json.dumps(lq, separators=(",", ":")))
             print(f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}")
+            return lq
     except:
         print("Failed to process:")
         print(json.dumps(js, indent=2))
         return js
 
 
-def process(user_string):
+def process(user_string, change=""):
     js = generate_gemini(user_string)
-    v = process_js(js)
-    return v
+    lq = process_js(js)
+    if change:
+        p2 = f"Query: \n{json.dumps(lq, indent=2)}\n\nImprovement: {change}"
+        js2 = generate_gemini(p2, "improve")
+        lq = process_js(js2)
+    return lq
 
 
-# process("I want books about tolkien")
+# process("I want books about tolkien", "no wait about C S Lewis")
+
+process("paintings of women in paris in the 1900s", "what about just paintings of paris with people in them")
