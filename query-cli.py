@@ -144,27 +144,37 @@ def process_js(js):
             qry = q["query"]
             scope = q["scope"]
             lq = post_process(qry, scope)
-            print(f"({scope})  {q['natural']}")
-            print(json.dumps(lq, indent=2))
             qstr = quote_plus(json.dumps(lq, separators=(",", ":")))
-            print(f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}")
-            return lq
+            q["url"] = f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}"
+            q["lux_query"] = lq
     except:
         print("Failed to process:")
         print(json.dumps(js, indent=2))
-        return js
+    return js
 
 
 def process(user_string, change=""):
     js = generate_gemini(user_string)
-    lq = process_js(js)
-    if change:
-        p2 = f"Query: \n{json.dumps(lq, indent=2)}\n\nImprovement: {change}"
-        js2 = generate_gemini(p2, "improve")
-        lq = process_js(js2)
-    return lq
+    process_js(js)
+    return js
+
+
+def update_query(query, change):
+    p2 = f"Query: \n{json.dumps(query, indent=2)}\n\nImprovement: {change}"
+    js2 = generate_gemini(p2, "improve")
+    process_js(js2)
+    return js2
 
 
 # process("I want books about tolkien", "no wait about C S Lewis")
+# process("paintings of women in paris in the 1900s", "what about just paintings of paris with people in them")
 
-process("paintings of women in paris in the 1900s", "what about just paintings of paris with people in them")
+
+print("Initial Query")
+js = process("Georgian scholars")
+print(json.dumps(js, indent=2))
+print()
+
+print("Updated Query")
+js2 = update_query(js["options"][0]["lux_query"], "Make it artists instead")
+print(json.dumps(js2, indent=2))
