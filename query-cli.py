@@ -152,8 +152,6 @@ def process_js(js):
             qry = q["query"]
             scope = q["scope"]
             lq = post_process(qry, scope)
-            print(f"({scope})  {q['natural']}")
-            print(json.dumps(lq, indent=2))
             qstr = quote_plus(json.dumps(lq, separators=(",", ":")))
             baseurl = f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}"
             if "AND" in lq and set([list(x.keys())[0] for x in lq["AND"]]) == set(
@@ -184,8 +182,3 @@ def process(user_string, change=""):
         js2 = generate_gemini(p2, "improve")
         lq = process_js(js2)
     return lq
-
-
-# process("I want books about tolkien", "no wait about C S Lewis")
-
-process("english impressionist painters")
