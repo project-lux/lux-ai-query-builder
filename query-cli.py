@@ -11,7 +11,7 @@ with open("google_project.txt") as fh:
 
 LUX_HOST = "https://lux.collections.yale.edu"
 
-with open("system-prompt-merged-short.txt") as fh:
+with open("system-prompt-merged-shorter.txt") as fh:
     system_prompt = fh.read().strip()
 
 with open("system-prompt-improve.txt") as fh:
@@ -26,8 +26,12 @@ generated_config = types.GenerateContentConfig(
     response_modalities=["TEXT"],
     safety_settings=[
         types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
-        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"),
-        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"),
+        types.SafetySetting(
+            category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"
+        ),
+        types.SafetySetting(
+            category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"
+        ),
         types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="OFF"),
     ],
     response_mime_type="application/json",
@@ -42,8 +46,12 @@ config_improve = types.GenerateContentConfig(
     response_modalities=["TEXT"],
     safety_settings=[
         types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
-        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"),
-        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"),
+        types.SafetySetting(
+            category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"
+        ),
+        types.SafetySetting(
+            category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"
+        ),
         types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="OFF"),
     ],
     response_mime_type="application/json",
@@ -96,7 +104,7 @@ def generate_gemini(prompt, which="build"):
     try:
         js = json.loads(jstr)
         return js
-    except Exception as e:
+    except Exception:
         print(jstr)
         sys.stdout.flush()
         return None
@@ -137,7 +145,7 @@ def post_process(query, scope=None):
 
 
 def process_js(js):
-    if type(js) == list:
+    if type(js) is list:
         js = {"options": js}
     try:
         for q in js["options"]:
@@ -147,16 +155,29 @@ def process_js(js):
             print(f"({scope})  {q['natural']}")
             print(json.dumps(lq, indent=2))
             qstr = quote_plus(json.dumps(lq, separators=(",", ":")))
-            print(f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}")
+            baseurl = f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}"
+            if "AND" in lq and set([list(x.keys())[0] for x in lq["AND"]]) == set(
+                ["text"]
+            ):
+                extra = quote_plus(
+                    " ".join([f'"{list(x.values())[0]}"' for x in lq["AND"]])
+                )
+                baseurl += f"&sq={extra}"
+            elif "text" in lq:
+                extra = quote_plus(f'"{lq["text"]}"')
+                baseurl += f"&sq={extra}"
+            print(baseurl)
             return lq
-    except:
+    except Exception:
         print("Failed to process:")
         print(json.dumps(js, indent=2))
+        raise
         return js
 
 
 def process(user_string, change=""):
     js = generate_gemini(user_string)
+    print(json.dumps(js, indent=2))
     lq = process_js(js)
     if change:
         p2 = f"Query: \n{json.dumps(lq, indent=2)}\n\nImprovement: {change}"
@@ -167,4 +188,4 @@ def process(user_string, change=""):
 
 # process("I want books about tolkien", "no wait about C S Lewis")
 
-process("paintings of women in paris in the 1900s", "what about just paintings of paris with people in them")
+process("english impressionist painters")
