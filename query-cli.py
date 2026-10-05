@@ -18,11 +18,11 @@ with open("system-prompt-improve.txt") as fh:
     system_prompt_improve = fh.read().strip()
 
 
-gemini_model = "gemini-3.1-flash-lite"
+gemini_model = "gemini-3.5-flash-lite"
 generated_config = types.GenerateContentConfig(
     temperature=0.8,
     top_p=0.95,
-    max_output_tokens=36000,
+    max_output_tokens=30000,
     response_modalities=["TEXT"],
     safety_settings=[
         types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
@@ -42,7 +42,7 @@ generated_config = types.GenerateContentConfig(
 config_improve = types.GenerateContentConfig(
     temperature=0.8,
     top_p=0.95,
-    max_output_tokens=36000,
+    max_output_tokens=30000,
     response_modalities=["TEXT"],
     safety_settings=[
         types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
