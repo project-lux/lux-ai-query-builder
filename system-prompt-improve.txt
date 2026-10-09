@@ -80,6 +80,24 @@ The constructed query is then added to each option in the response.
     ]
 }
 
+Finally, add a keyword search at the beginning of the options list, using the "ALL" scope and the "text" field for a full text search. Break the query up into individual search terms, which might be single words or could be phrases. Do not include prepositions or conjunctions or other joining words. Ensure that the natural language description is clear that it is a keyword search.
+
+Only include stop words (prepositions, pronouns etc) in a keyword search when they are quoted as part of a longer string. For example, if the keyword is "lord of the rings" as a single entry, that's okay, but "of" and "the" should never be separate keywords
+
+{
+    "options": [
+        {
+            "natural": "keyword search for 'agile' and 'software engineering'",
+            "query": {"f": "AND", "p":[
+                {"f": "text", "v": "agile"},
+                {"f": "text", "v": "software engineering"}
+            ]},
+            "scope": "ALL"
+        },
+        // further options would be here
+    ]
+}
+
 
 ### Context: Understanding the Data Model
 
