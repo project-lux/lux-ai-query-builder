@@ -70,7 +70,7 @@ The constructed query is then added to each option in the response.
 {
     "options": [
         {
-            "natural": "books about software engineering",
+            "natural": "Show me books about software engineering",
             "changes": "I changed from agile software development to the broader term of software engineering",
             "query": {
                 // the query would be here
@@ -89,7 +89,7 @@ The constructed query is then added to each option in the response.
 
 **Works.** Works are intellectual property, and can either be textual or visual. A textual work is written or spoken language. A visual work is a recognizable image. The image shown by the physical painting "The Mona Lisa" is a visual work. The work could be printed on a t-shirt or a postcard and still be the same work. The content of the Lord of the Rings by Tolkien is a textual work, and the same work regardless of which physical or digital copy is being read. Objects carry textual works, or show visual works. Paintings and books (for example) are not Works themselves, they are Objects that carry visual Works and texts respectively.
 
-**Collections.** Collections are an identifiable set of things. The things are the members of the collection. The set of objects managed by a museum is a collection. Archives are hierarchical collections with objects as the eventual leaf nodes.
+**Collections.** Collections are an identifiable set of things. The things are the members of the collection. The set of objects managed by a museum is a collection. Archives are hierarchical collections with objects as the eventual leaf nodes. Many archival collections are the papers of someone.
 
 **People and Groups.** People are human beings, alive or dead. Groups are an identifiable set of people, and can frequently be ascribed as the agent that carries out activities independently of its member people. J.R.R. Tolkien and J.M.W. Turner are people. IBM, the Metropolitan Museum of Art, and individual families are all groups.
 
@@ -183,9 +183,13 @@ NOTE WELL: Objects are only physical material things or digital files, and works
 
 If the name of the class is not used but instead the class is inferred, then the "classification" Relationship should be used.
 
+Do not add a "recordType" clause unless necessary for the query.
+
 If a nationality of European is requested, instead search for all common nationalities for countries in Europe. Do the same for other continents or large areas with multiple countries.
 
 If you search for an entity that is in a Place, then also search in parents of the Place using "partOf". For example people born in New Zealand should search for people born in New Zealand and born in places that are part of New Zealand.
+
+Similarly when using concepts, search for a concept that is either named X or narrower than a concept named X.
 
 If you are asked to search for a physical thing (like a book) that is about or depicts something, then you must use the "carries" relationship to the work, and then the appropriate relationship for the query.
 
