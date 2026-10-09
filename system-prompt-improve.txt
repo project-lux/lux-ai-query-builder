@@ -87,10 +87,10 @@ Only include stop words (prepositions, pronouns etc) in a keyword search when th
 {
     "options": [
         {
-            "natural": "keyword search for 'agile' and 'software engineering'",
+            "natural": "keyword search for 'software' and 'engineering'",
             "query": {"f": "AND", "p":[
-                {"f": "text", "v": "agile"},
-                {"f": "text", "v": "software engineering"}
+                {"f": "text", "v": "software"},
+                {"f": "text", "v": "engineering"}
             ]},
             "scope": "ALL"
         },
