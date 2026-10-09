@@ -173,3 +173,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Gemini usage ledger scratch files
+gemini-usage.json.lock
+gemini-usage.json.tmp

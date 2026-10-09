@@ -1,0 +1,31 @@
+{
+  "input_tokens": 6007,
+  "output_tokens": 4704,
+  "thinking_tokens": 16385,
+  "calls": 12,
+  "cost": 4.083592,
+  "by_label": {
+    "generate-inputs batch": {
+      "input_tokens": 3907,
+      "output_tokens": 4704,
+      "thinking_tokens": 16385,
+      "calls": 10,
+      "cost": 0.082016
+    },
+    "generate-inputs embedding": {
+      "input_tokens": 2100,
+      "output_tokens": 0,
+      "thinking_tokens": 0,
+      "calls": 2,
+      "cost": 0.001576
+    },
+    "estimated prior usage (untracked)": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "thinking_tokens": 0,
+      "calls": 0,
+      "cost": 4.0
+    }
+  },
+  "updated": "2026-10-09T16:59:53"
+}

@@ -9,6 +9,8 @@ from vertexai.generative_models import GenerativeModel, Part
 from google import genai
 from google.genai import types
 
+import gemini_usage
+
 from jsonschema import Draft202012Validator
 schemafn = "generated_schema.json"
 fh = open(schemafn)
@@ -94,12 +96,16 @@ def generate(prompt, cfg=generated_config):
     )
   ]
   output = []
+  gemini_usage.check()
+  usage = None
   for chunk in client.models.generate_content_stream(
     model = model,
     contents = contents,
     config = cfg,
     ):
-    output.append(chunk.text)
+    output.append(chunk.text or '')
+    usage = chunk.usage_metadata or usage
+  gemini_usage.record(usage, "ai-proxy")
   return ''.join(output)
 
 error_q = json.dumps({"_scope": "item", "text": "ERROR"})

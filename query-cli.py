@@ -6,6 +6,8 @@ import requests
 from google import genai
 from google.genai import types
 
+import gemini_usage
+
 with open("google_project.txt") as fh:
     gcp_name = fh.read().strip()
 
@@ -94,12 +96,16 @@ def generate_gemini(prompt, which="build"):
     contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
     output = []
     cfg = generated_config if which == "build" else config_improve
+    gemini_usage.check()
+    usage = None
     for chunk in gemini.models.generate_content_stream(
         model=gemini_model,
         contents=contents,
         config=cfg,
     ):
-        output.append(chunk.text)
+        output.append(chunk.text or "")
+        usage = chunk.usage_metadata or usage
+    gemini_usage.record(usage, f"query-cli {which}")
     jstr = "".join(output)
     try:
         js = json.loads(jstr)

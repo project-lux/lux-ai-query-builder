@@ -1,0 +1,72 @@
+{
+  "record_types": {
+    "objects": "physical things: artworks, specimens, artifacts, photographs, prints, coins, instruments",
+    "books and texts": "books, periodicals, manuscripts, letters, sound recordings, films, musical scores",
+    "archival collections": "archives, papers, records and collections held as a group",
+    "people": "individual people: artists, authors, scientists, collectors, historical figures",
+    "groups": "organizations, companies, societies, families, publishers, ensembles",
+    "places": "places: cities, regions, countries, sites, buildings",
+    "events": "events, exhibitions, expeditions, historical periods, activities",
+    "concepts": "subjects, genres, materials, techniques, styles, types of thing"
+  },
+  "features": {
+    "date or date range": ["objects", "books and texts", "archival collections", "people", "groups", "events"],
+    "place where it was made or happened": ["objects", "books and texts", "archival collections", "events"],
+    "creator, author or maker": ["objects", "books and texts", "archival collections"],
+    "material or technique": ["objects"],
+    "subject it is about or depicts": ["objects", "books and texts", "archival collections"],
+    "language": ["books and texts", "archival collections"],
+    "type or genre": ["objects", "books and texts", "archival collections", "groups", "places", "concepts"],
+    "physical size": ["objects"],
+    "must have digital images": ["objects", "books and texts"],
+    "held by a particular Yale museum, library or collection": ["objects", "books and texts", "archival collections"],
+    "excludes something (not X)": ["objects", "books and texts", "archival collections", "people", "groups", "places", "events", "concepts"],
+    "either of two alternatives (X or Y)": ["objects", "books and texts", "archival collections", "people", "groups", "places", "events", "concepts"],
+    "occupation or role": ["people"],
+    "nationality": ["people"],
+    "gender": ["people"],
+    "where born, lived or died": ["people"],
+    "where founded or based": ["groups"],
+    "members or people involved": ["groups", "events"],
+    "part of a larger place": ["places"],
+    "things made or found there": ["places"],
+    "people or groups who made, wrote or created works on this topic": ["people", "groups"],
+    "related or broader concept": ["concepts"],
+    "items related to it": ["people", "groups", "places", "events", "concepts"]
+  },
+  "complexity": {
+    "1": "a single simple idea, possibly just a few words",
+    "2": "two constraints",
+    "3": "three constraints",
+    "4": "four constraints, a detailed request",
+    "5": "five or more constraints, a long and specific research request"
+  },
+  "phrasing": [
+    "direct question",
+    "polite request to a librarian",
+    "statement of a research need or assignment",
+    "casual, chatty wording",
+    "terse and hurried",
+    "contains realistic typos or misspellings",
+    "vague or uncertain about what exactly they want",
+    "explains the context of why they want it"
+  ],
+  "personas": [
+    "first-year undergraduate exploring for the first time",
+    "history major writing a senior essay",
+    "art history PhD student",
+    "biology or geology major",
+    "engineering student taking a humanities requirement",
+    "literature and creative writing student",
+    "anthropology or archaeology student",
+    "music or theater student",
+    "architecture student",
+    "religious studies or divinity student",
+    "political science or economics student",
+    "international student researching their home country",
+    "student working on a class presentation due tomorrow",
+    "student curious about Yale's own history",
+    "environmental studies student",
+    "medical or nursing student interested in the history of medicine"
+  ]
+}
