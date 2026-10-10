@@ -102,16 +102,17 @@ def hit_count(scope, lq):
         return None, str(e)
 
 
-def run_one(user_input, attempts=2):
+def run_one(user_input, attempts=2, generate=None):
+    generate = generate or qc.generate_gemini
     result = {"input": user_input, "options": [], "error": None}
     js = None
     for _ in range(attempts):
         try:
-            js = qc.generate_gemini(user_input)
-        except gemini_usage.BudgetExceeded:
+            js = generate(user_input)
+        except (gemini_usage.BudgetExceeded, requests.ConnectionError):
             raise
         except Exception as e:
-            result["error"] = f"gemini: {e}"
+            result["error"] = f"model: {e}"
             js = None
         if js:
             break

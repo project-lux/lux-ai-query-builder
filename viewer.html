@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
-  Viewer for translated-inputs.jsonl (translated requests and their LUX queries).
+  Viewer for translated-inputs*.jsonl (translated requests and their LUX queries).
+  ?file=translated-inputs-local.jsonl selects another results file (or use the dropdown).
   Run from the repo directory:  python viewer-server.py
   then open http://localhost:8000/viewer.html
   Ratings (1 bad, 2 acceptable, 3 good) are saved to ratings.sqlite by the server.
@@ -84,6 +85,7 @@
 <body>
 <header>
   <h1>LUX query test viewer</h1>
+  <select id="source" hidden title="Results file"></select>
   <input type="search" id="q" placeholder="Search requests and queries…">
   <select id="discipline"><option value="">All disciplines</option></select>
   <select id="record_type"><option value="">All record types</option></select>
@@ -117,11 +119,15 @@ let shown = [];
 let selected = null;
 let ratings = {};          // slot -> {rating, rated_at}
 let ratingsEnabled = false;
+const SOURCE = new URLSearchParams(location.search).get("file") || "translated-inputs.jsonl";
 const RATING_LABELS = {1: "Bad", 2: "Acceptable", 3: "Good"};
 const ratingOf = r => ratings[r.slot] ? ratings[r.slot].rating : 0;
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
-const parseJsonl = text => text.split("\n").filter(l => l.trim()).map(l => JSON.parse(l));
+// skips unparseable lines, e.g. a partly written last line while a run is in progress
+const parseJsonl = text => text.split("\n").filter(l => l.trim()).flatMap(l => {
+  try { return [JSON.parse(l)]; } catch (e) { return []; }
+});
 const structured = t => t ? t.options.filter(o => !o.keyword) : [];
 
 function fillSelect(id, values) {
@@ -225,7 +231,7 @@ async function rate(r, value, advance) {
   select(next || r);
   try {
     const resp = await fetch("api/ratings", {method: "POST", headers: {"Content-Type": "application/json"},
-                                             body: JSON.stringify({slot: r.slot, rating: value})});
+                                             body: JSON.stringify({source: SOURCE, slot: r.slot, rating: value})});
     if (!resp.ok) throw new Error(await resp.text());
   } catch (e) {
     if (prev) ratings[r.slot] = prev; else delete ratings[r.slot];
@@ -322,14 +328,24 @@ async function fetchJsonl(fn) {
 }
 
 (async () => {
-  const translated = await fetchJsonl("translated-inputs.jsonl");
+  try {
+    const resp = await fetch("api/sources", {cache: "no-store"});
+    if (resp.ok) {
+      const sel = $("source");
+      for (const f of await resp.json()) sel.add(new Option(f, f, false, f === SOURCE));
+      sel.hidden = false;
+      sel.addEventListener("change", () => { location.search = "?file=" + encodeURIComponent(sel.value); });
+    }
+  } catch (e) { /* static server */ }
+  document.title = `LUX query test viewer · ${SOURCE}`;
+  const translated = await fetchJsonl(SOURCE);
   if (!translated.length) {
-    $("detail").innerHTML = `<div class="empty">Couldn't load translated-inputs.jsonl automatically.<br>
+    $("detail").innerHTML = `<div class="empty">Couldn't load ${esc(SOURCE)} automatically.<br>
       Serve this directory (<code>python -m http.server 8000</code>) or use the file picker above.</div>`;
     return;
   }
   try {
-    const resp = await fetch("api/ratings", {cache: "no-store"});
+    const resp = await fetch("api/ratings?source=" + encodeURIComponent(SOURCE), {cache: "no-store"});
     if (resp.ok) { ratings = await resp.json(); ratingsEnabled = true; $("rating").hidden = false; }
   } catch (e) { /* static server: read-only */ }
   setData(translated);
