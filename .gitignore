@@ -177,3 +177,8 @@ cython_debug/
 # Gemini usage ledger scratch files
 gemini-usage.json.lock
 gemini-usage.json.tmp
+
+# SQLite transient files
+ratings.sqlite-journal
+ratings.sqlite-wal
+ratings.sqlite-shm
