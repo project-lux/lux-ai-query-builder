@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<!--
+  Viewer for generated-inputs.jsonl and translated-inputs.jsonl.
+  Run from the repo directory:  python -m http.server 8000
+  then open http://localhost:8000/viewer.html
+  (or open the file directly and use "Load files" to pick the JSONL files)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LUX query test viewer</title>
+<style>
+  :root {
+    --bg: #fff; --fg: #1d1d1f; --muted: #6e6e73; --line: #e3e3e8; --panel: #f6f6f8;
+    --accent: #00356b; --sel: #e6eef7; --kw: #8a5a00; --kwbg: #fff4dc;
+    --bool: #6b2fa0; --rel: #00356b; --field: #1d6b3a; --val: #a3361f; --err: #b00020;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --fg: #f2f2f7; --muted: #a1a1a6; --line: #38383c; --panel: #26262a;
+      --accent: #8fb8e8; --sel: #2c3a4d; --kw: #f0c060; --kwbg: #3a3020;
+      --bool: #c9a0f0; --rel: #8fb8e8; --field: #7fd39a; --val: #f0a08c; --err: #ff6b81;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 13px/1.4 -apple-system, system-ui, sans-serif; color: var(--fg);
+         background: var(--bg); height: 100vh; display: flex; flex-direction: column; }
+  header { padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex;
+           flex-wrap: wrap; gap: 6px 10px; align-items: center; background: var(--panel); }
+  header h1 { font-size: 14px; margin: 0 8px 0 0; }
+  header input[type=search] { width: 220px; }
+  header select, header input { font: inherit; padding: 2px 4px; }
+  header select { max-width: 200px; }
+  header label { color: var(--muted); }
+  #stats { margin-left: auto; color: var(--muted); }
+  main { flex: 1; display: flex; min-height: 0; }
+  #list { width: 42%; min-width: 320px; overflow-y: auto; border-right: 1px solid var(--line); }
+  #detail { flex: 1; overflow-y: auto; padding: 12px 16px; }
+  .row { padding: 5px 10px; border-bottom: 1px solid var(--line); cursor: pointer;
+         display: grid; grid-template-columns: 56px 1fr; gap: 2px 8px; }
+  .row:hover { background: var(--panel); }
+  .row.sel { background: var(--sel); }
+  .row .slot { color: var(--muted); font: 11px ui-monospace, monospace; }
+  .row .text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .meta { grid-column: 2; color: var(--muted); font-size: 11px; }
+  .row.untranslated .text { color: var(--muted); }
+  .badge { display: inline-block; padding: 0 5px; border-radius: 3px; font-size: 11px;
+           border: 1px solid var(--line); margin-right: 3px; white-space: nowrap; }
+  .badge.c { background: var(--panel); }
+  .badge.scope { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .badge.kw { color: var(--kw); background: var(--kwbg); border-color: transparent; }
+  .badge.err { color: var(--err); border-color: var(--err); }
+  .badge.hits { font-variant-numeric: tabular-nums; }
+  h2 { font-size: 15px; font-weight: 500; margin: 0 0 8px; line-height: 1.45; }
+  .spec { color: var(--muted); margin-bottom: 14px; }
+  .spec b { color: var(--fg); font-weight: 500; }
+  .opt { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; }
+  .opt.keyword { background: var(--kwbg); border-color: transparent; }
+  .opt-head { display: flex; gap: 6px; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; }
+  .opt-head .natural { flex: 1; min-width: 200px; }
+  .opt-head a { color: var(--accent); font-size: 12px; }
+  .q { font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .q ul { list-style: none; margin: 0; padding-left: 14px; border-left: 1px solid var(--line); }
+  .q .op { color: var(--bool); font-weight: 700; }
+  .q .rel { color: var(--rel); }
+  .q .field { color: var(--field); }
+  .q .val { color: var(--val); }
+  .q .cmp { color: var(--muted); }
+  details { margin-top: 6px; } summary { color: var(--muted); cursor: pointer; font-size: 11px; }
+  pre { font: 11px ui-monospace, monospace; background: var(--panel); padding: 6px;
+        overflow-x: auto; margin: 4px 0 0; }
+  .empty { color: var(--muted); padding: 30px; text-align: center; }
+  .error { color: var(--err); }
+</style>
+</head>
+<body>
+<header>
+  <h1>LUX query test viewer</h1>
+  <input type="search" id="q" placeholder="Search requests and queries…">
+  <select id="discipline"><option value="">All disciplines</option></select>
+  <select id="record_type"><option value="">All record types</option></select>
+  <select id="complexity"><option value="">Any complexity</option></select>
+  <select id="scope"><option value="">Any scope</option></select>
+  <select id="status">
+    <option value="translated">Translated</option>
+    <option value="">All inputs</option>
+    <option value="untranslated">Not translated</option>
+    <option value="nostructured">Keyword only (no structured query)</option>
+    <option value="multi">Multiple structured queries</option>
+    <option value="error">Errors</option>
+    <option value="zero">Zero hits</option>
+  </select>
+  <label><input type="file" id="files" multiple accept=".jsonl" style="width: 190px"></label>
+  <span id="stats"></span>
+</header>
+<main>
+  <div id="list"></div>
+  <div id="detail"><div class="empty">Loading…</div></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let records = [];   // merged: {slot, input, spec, t: translated record or null}
+let shown = [];
+let selected = null;
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const parseJsonl = text => text.split("\n").filter(l => l.trim()).map(l => JSON.parse(l));
+const structured = t => t ? t.options.filter(o => !o.keyword) : [];
+
+function merge(generated, translated) {
+  const bySlot = new Map(translated.map(t => [t.slot, t]));
+  const out = generated.map(g => ({slot: g.spec.slot, input: g.input, spec: g.spec, t: bySlot.get(g.spec.slot) || null}));
+  // translated records whose input file wasn't loaded
+  const have = new Set(out.map(r => r.slot));
+  for (const t of translated) if (!have.has(t.slot)) out.push({slot: t.slot, input: t.input, spec: t.spec, t});
+  out.sort((a, b) => a.slot.localeCompare(b.slot));
+  return out;
+}
+
+function fillSelect(id, values) {
+  const sel = $(id);
+  sel.length = 1;
+  for (const v of [...new Set(values)].sort()) sel.add(new Option(v, v));
+}
+
+function setData(generated, translated) {
+  records = merge(generated, translated);
+  for (const r of records) {
+    r.search = (r.input + " " + (r.t ? JSON.stringify(r.t.options.map(o => [o.natural, o.lux_query])) : "")).toLowerCase();
+  }
+  fillSelect("discipline", records.map(r => r.spec.discipline));
+  fillSelect("record_type", records.map(r => r.spec.record_type));
+  fillSelect("complexity", records.map(r => r.spec.complexity));
+  fillSelect("scope", records.flatMap(r => structured(r.t).map(o => o.scope)));
+  if (!translated.length) $("status").value = "";
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = $("q").value.trim().toLowerCase();
+  const f = {discipline: $("discipline").value, record_type: $("record_type").value,
+             complexity: $("complexity").value};
+  const scope = $("scope").value, status = $("status").value;
+  shown = records.filter(r => {
+    for (const k in f) if (f[k] && r.spec[k] !== f[k]) return false;
+    if (q && !r.search.includes(q)) return false;
+    const s = structured(r.t);
+    if (scope && !s.some(o => o.scope === scope)) return false;
+    switch (status) {
+      case "translated": return !!r.t;
+      case "untranslated": return !r.t;
+      case "nostructured": return r.t && !s.length;
+      case "multi": return s.length > 1;
+      case "error": return r.t && (r.t.error || r.t.options.some(o => o.error || o.hits_error));
+      case "zero": return s.some(o => o.hits === 0);
+    }
+    return true;
+  });
+  const nt = records.filter(r => r.t).length;
+  $("stats").textContent = `${shown.length} shown · ${nt} translated · ${records.length} inputs`;
+  renderList();
+  if (!shown.includes(selected)) select(shown[0] || null);
+}
+
+function renderList() {
+  $("list").innerHTML = shown.length ? shown.map((r, i) => {
+    const s = structured(r.t);
+    const scopes = s.map(o => `<span class="badge scope">${esc(o.scope)}</span>`).join("");
+    const flags = !r.t ? "" : r.t.error ? `<span class="badge err">error</span>` :
+                  !s.length ? `<span class="badge kw">keyword only</span>` : "";
+    return `<div class="row${r === selected ? " sel" : ""}${r.t ? "" : " untranslated"}" data-i="${i}">
+      <span class="slot">${esc(r.slot)}</span>
+      <span class="text" title="${esc(r.input)}">${esc(r.input)}</span>
+      <span class="meta"><span class="badge c">c${esc(r.spec.complexity)}</span>${esc(r.spec.record_type)}
+        → ${scopes || (r.t ? "" : "not translated")} ${flags}</span>
+    </div>`;
+  }).join("") : `<div class="empty">No matching inputs</div>`;
+}
+
+$("list").addEventListener("click", e => {
+  const row = e.target.closest(".row");
+  if (row) select(shown[+row.dataset.i]);
+});
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "j" && e.key !== "k") return;
+  e.preventDefault();
+  const i = shown.indexOf(selected) + (e.key === "ArrowDown" || e.key === "j" ? 1 : -1);
+  if (shown[i]) select(shown[i]);
+});
+
+function select(r) {
+  selected = r;
+  document.querySelectorAll(".row.sel").forEach(el => el.classList.remove("sel"));
+  const i = shown.indexOf(r);
+  const row = document.querySelector(`.row[data-i="${i}"]`);
+  if (row) { row.classList.add("sel"); row.scrollIntoView({block: "nearest"}); }
+  renderDetail(r);
+}
+
+// ---- Query tree rendering ----
+const fmtVal = v => typeof v === "string"
+  ? `"${esc(v.replace(/T00:00:00(Z)?$/, ""))}"` : esc(JSON.stringify(v));
+const cmpSym = {">=": "≥", "<=": "≤", ">": "&gt;", "<": "&lt;", "=": "="};
+
+function renderQuery(q) {
+  if (q === null || typeof q !== "object") return `<span class="val">${fmtVal(q)}</span>`;
+  const parts = Object.keys(q).filter(k => k !== "_comp").map(k => {
+    const v = q[k];
+    if (["AND", "OR", "NOT"].includes(k) && Array.isArray(v)) {
+      return `<span class="op">${k}</span><ul>${v.map(x => `<li>${renderQuery(x)}</li>`).join("")}</ul>`;
+    }
+    if (v !== null && typeof v === "object") {
+      return `<span class="rel">${esc(k)}</span> › ${renderQuery(v)}`;
+    }
+    const cmp = q._comp ? cmpSym[q._comp] || esc(q._comp) : "=";
+    return `<span class="field">${esc(k)}</span> <span class="cmp">${cmp}</span> <span class="val">${fmtVal(v)}</span>`;
+  });
+  return parts.join("<br>");
+}
+
+function renderOption(o) {
+  const hits = o.keyword ? "" : o.hits === undefined || o.hits === null
+    ? `<span class="badge hits" title="hit count not fetched">hits —</span>`
+    : `<span class="badge hits">${Number(o.hits).toLocaleString()} hits</span>`;
+  const err = o.error || o.hits_error;
+  return `<div class="opt${o.keyword ? " keyword" : ""}">
+    <div class="opt-head">
+      ${o.keyword ? `<span class="badge kw">keyword</span>` : `<span class="badge scope">${esc(o.scope)}</span>`}
+      <span class="natural">${esc(o.natural || "")}</span>
+      ${hits}
+      ${o.url ? `<a href="${esc(o.url)}" target="_blank" rel="noopener">open in LUX ↗</a>` : ""}
+    </div>
+    ${err ? `<div class="error">${esc(err)}</div>` : ""}
+    <div class="q">${o.lux_query ? renderQuery(o.lux_query) : ""}</div>
+    <details><summary>JSON</summary><pre>${esc(JSON.stringify({lux_query: o.lux_query, model_query: o.model_query}, null, 1))}</pre></details>
+  </div>`;
+}
+
+function renderDetail(r) {
+  if (!r) { $("detail").innerHTML = `<div class="empty">Nothing selected</div>`; return; }
+  const s = r.spec;
+  let html = `<h2>${esc(r.input)}</h2>
+    <div class="spec">
+      <b>${esc(s.discipline)}</b> · ${esc(s.topic)}<br>
+      wants <b>${esc(s.record_type)}</b> · complexity <b>${esc(s.complexity)}</b>
+      ${s.features && s.features.length ? ` · constraints: ${s.features.map(esc).join("; ")}` : ""}
+      · <i>${esc(s.phrasing)}</i> · <span class="slot">${esc(r.slot)}</span>
+    </div>`;
+  if (!r.t) html += `<div class="empty">Not translated yet</div>`;
+  else {
+    if (r.t.error) html += `<div class="error">Translation error: ${esc(r.t.error)}</div>`;
+    // structured options first, keyword search last
+    const opts = [...r.t.options].sort((a, b) => (a.keyword ? 1 : 0) - (b.keyword ? 1 : 0));
+    html += opts.map(renderOption).join("");
+  }
+  $("detail").innerHTML = html;
+}
+
+// ---- Loading ----
+for (const id of ["q", "discipline", "record_type", "complexity", "scope", "status"]) {
+  $(id).addEventListener(id === "q" ? "input" : "change", applyFilters);
+}
+
+$("files").addEventListener("change", async e => {
+  let generated = [], translated = [];
+  for (const file of e.target.files) {
+    const rows = parseJsonl(await file.text());
+    if (rows.length && "options" in rows[0]) translated = translated.concat(rows);
+    else generated = generated.concat(rows);
+  }
+  setData(generated, translated);
+});
+
+async function fetchJsonl(fn) {
+  try {
+    const resp = await fetch(fn, {cache: "no-store"});
+    return resp.ok ? parseJsonl(await resp.text()) : [];
+  } catch (e) { return []; }
+}
+
+(async () => {
+  const [generated, translated] = await Promise.all([
+    fetchJsonl("generated-inputs.jsonl"), fetchJsonl("translated-inputs.jsonl")]);
+  if (!generated.length && !translated.length) {
+    $("detail").innerHTML = `<div class="empty">Couldn't load the JSONL files automatically.<br>
+      Serve this directory (<code>python -m http.server 8000</code>) or use the file picker above.</div>`;
+    return;
+  }
+  setData(generated, translated);
+})();
+</script>
+</body>
+</html>
