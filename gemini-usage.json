@@ -1,9 +1,9 @@
 {
-  "input_tokens": 693564,
-  "output_tokens": 265953,
-  "thinking_tokens": 50765,
-  "calls": 144,
-  "cost": 5.707862,
+  "input_tokens": 2346819,
+  "output_tokens": 381771,
+  "thinking_tokens": 257482,
+  "calls": 444,
+  "cost": 8.157315,
   "by_label": {
     "generate-inputs batch": {
       "input_tokens": 3907,
@@ -34,12 +34,12 @@
       "cost": 1.216578
     },
     "query-cli build": {
-      "input_tokens": 275480,
-      "output_tokens": 19245,
-      "thinking_tokens": 34380,
-      "calls": 50,
-      "cost": 0.407706
+      "input_tokens": 1928735,
+      "output_tokens": 135063,
+      "thinking_tokens": 241097,
+      "calls": 350,
+      "cost": 2.857164
     }
   },
-  "updated": "2026-10-09T20:18:02"
+  "updated": "2026-10-09T20:23:00"
 }
