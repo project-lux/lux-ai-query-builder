@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-  Viewer for generated-inputs.jsonl and translated-inputs.jsonl.
+  Viewer for translated-inputs.jsonl (translated requests and their LUX queries).
   Run from the repo directory:  python -m http.server 8000
   then open http://localhost:8000/viewer.html
-  (or open the file directly and use "Load files" to pick the JSONL files)
+  (or open the file directly and use the file picker to load translated-inputs.jsonl)
 -->
 <html lang="en">
 <head>
@@ -43,7 +43,6 @@
   .row .slot { color: var(--muted); font: 11px ui-monospace, monospace; }
   .row .text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .row .meta { grid-column: 2; color: var(--muted); font-size: 11px; }
-  .row.untranslated .text { color: var(--muted); }
   .badge { display: inline-block; padding: 0 5px; border-radius: 3px; font-size: 11px;
            border: 1px solid var(--line); margin-right: 3px; white-space: nowrap; }
   .badge.c { background: var(--panel); }
@@ -82,15 +81,13 @@
   <select id="complexity"><option value="">Any complexity</option></select>
   <select id="scope"><option value="">Any scope</option></select>
   <select id="status">
-    <option value="translated">Translated</option>
-    <option value="">All inputs</option>
-    <option value="untranslated">Not translated</option>
+    <option value="">All</option>
     <option value="nostructured">Keyword only (no structured query)</option>
     <option value="multi">Multiple structured queries</option>
     <option value="error">Errors</option>
     <option value="zero">Zero hits</option>
   </select>
-  <label><input type="file" id="files" multiple accept=".jsonl" style="width: 190px"></label>
+  <label><input type="file" id="files" accept=".jsonl" style="width: 190px"></label>
   <span id="stats"></span>
 </header>
 <main>
@@ -99,7 +96,7 @@
 </main>
 <script>
 const $ = id => document.getElementById(id);
-let records = [];   // merged: {slot, input, spec, t: translated record or null}
+let records = [];   // {slot, input, spec, t: translated record}
 let shown = [];
 let selected = null;
 
@@ -107,32 +104,22 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", 
 const parseJsonl = text => text.split("\n").filter(l => l.trim()).map(l => JSON.parse(l));
 const structured = t => t ? t.options.filter(o => !o.keyword) : [];
 
-function merge(generated, translated) {
-  const bySlot = new Map(translated.map(t => [t.slot, t]));
-  const out = generated.map(g => ({slot: g.spec.slot, input: g.input, spec: g.spec, t: bySlot.get(g.spec.slot) || null}));
-  // translated records whose input file wasn't loaded
-  const have = new Set(out.map(r => r.slot));
-  for (const t of translated) if (!have.has(t.slot)) out.push({slot: t.slot, input: t.input, spec: t.spec, t});
-  out.sort((a, b) => a.slot.localeCompare(b.slot));
-  return out;
-}
-
 function fillSelect(id, values) {
   const sel = $(id);
   sel.length = 1;
   for (const v of [...new Set(values)].sort()) sel.add(new Option(v, v));
 }
 
-function setData(generated, translated) {
-  records = merge(generated, translated);
+function setData(translated) {
+  records = translated.map(t => ({slot: t.slot, input: t.input, spec: t.spec, t}));
+  records.sort((a, b) => a.slot.localeCompare(b.slot));
   for (const r of records) {
-    r.search = (r.input + " " + (r.t ? JSON.stringify(r.t.options.map(o => [o.natural, o.lux_query])) : "")).toLowerCase();
+    r.search = (r.input + " " + JSON.stringify(r.t.options.map(o => [o.natural, o.lux_query]))).toLowerCase();
   }
   fillSelect("discipline", records.map(r => r.spec.discipline));
   fillSelect("record_type", records.map(r => r.spec.record_type));
   fillSelect("complexity", records.map(r => r.spec.complexity));
   fillSelect("scope", records.flatMap(r => structured(r.t).map(o => o.scope)));
-  if (!translated.length) $("status").value = "";
   applyFilters();
 }
 
@@ -147,17 +134,14 @@ function applyFilters() {
     const s = structured(r.t);
     if (scope && !s.some(o => o.scope === scope)) return false;
     switch (status) {
-      case "translated": return !!r.t;
-      case "untranslated": return !r.t;
-      case "nostructured": return r.t && !s.length;
+      case "nostructured": return !s.length;
       case "multi": return s.length > 1;
-      case "error": return r.t && (r.t.error || r.t.options.some(o => o.error || o.hits_error));
+      case "error": return (r.t.error || r.t.options.some(o => o.error || o.hits_error));
       case "zero": return s.some(o => o.hits === 0);
     }
     return true;
   });
-  const nt = records.filter(r => r.t).length;
-  $("stats").textContent = `${shown.length} shown · ${nt} translated · ${records.length} inputs`;
+  $("stats").textContent = `${shown.length} shown · ${records.length} translated`;
   renderList();
   if (!shown.includes(selected)) select(shown[0] || null);
 }
@@ -166,13 +150,13 @@ function renderList() {
   $("list").innerHTML = shown.length ? shown.map((r, i) => {
     const s = structured(r.t);
     const scopes = s.map(o => `<span class="badge scope">${esc(o.scope)}</span>`).join("");
-    const flags = !r.t ? "" : r.t.error ? `<span class="badge err">error</span>` :
+    const flags = r.t.error ? `<span class="badge err">error</span>` :
                   !s.length ? `<span class="badge kw">keyword only</span>` : "";
-    return `<div class="row${r === selected ? " sel" : ""}${r.t ? "" : " untranslated"}" data-i="${i}">
+    return `<div class="row${r === selected ? " sel" : ""}" data-i="${i}">
       <span class="slot">${esc(r.slot)}</span>
       <span class="text" title="${esc(r.input)}">${esc(r.input)}</span>
       <span class="meta"><span class="badge c">c${esc(r.spec.complexity)}</span>${esc(r.spec.record_type)}
-        → ${scopes || (r.t ? "" : "not translated")} ${flags}</span>
+        → ${scopes} ${flags}</span>
     </div>`;
   }).join("") : `<div class="empty">No matching inputs</div>`;
 }
@@ -248,13 +232,10 @@ function renderDetail(r) {
       ${s.features && s.features.length ? ` · constraints: ${s.features.map(esc).join("; ")}` : ""}
       · <i>${esc(s.phrasing)}</i> · <span class="slot">${esc(r.slot)}</span>
     </div>`;
-  if (!r.t) html += `<div class="empty">Not translated yet</div>`;
-  else {
-    if (r.t.error) html += `<div class="error">Translation error: ${esc(r.t.error)}</div>`;
-    // structured options first, keyword search last
-    const opts = [...r.t.options].sort((a, b) => (a.keyword ? 1 : 0) - (b.keyword ? 1 : 0));
-    html += opts.map(renderOption).join("");
-  }
+  if (r.t.error) html += `<div class="error">Translation error: ${esc(r.t.error)}</div>`;
+  // structured options first, keyword search last
+  const opts = [...r.t.options].sort((a, b) => (a.keyword ? 1 : 0) - (b.keyword ? 1 : 0));
+  html += opts.map(renderOption).join("");
   $("detail").innerHTML = html;
 }
 
@@ -264,13 +245,8 @@ for (const id of ["q", "discipline", "record_type", "complexity", "scope", "stat
 }
 
 $("files").addEventListener("change", async e => {
-  let generated = [], translated = [];
-  for (const file of e.target.files) {
-    const rows = parseJsonl(await file.text());
-    if (rows.length && "options" in rows[0]) translated = translated.concat(rows);
-    else generated = generated.concat(rows);
-  }
-  setData(generated, translated);
+  const file = e.target.files[0];
+  if (file) setData(parseJsonl(await file.text()));
 });
 
 async function fetchJsonl(fn) {
@@ -281,14 +257,13 @@ async function fetchJsonl(fn) {
 }
 
 (async () => {
-  const [generated, translated] = await Promise.all([
-    fetchJsonl("generated-inputs.jsonl"), fetchJsonl("translated-inputs.jsonl")]);
-  if (!generated.length && !translated.length) {
-    $("detail").innerHTML = `<div class="empty">Couldn't load the JSONL files automatically.<br>
+  const translated = await fetchJsonl("translated-inputs.jsonl");
+  if (!translated.length) {
+    $("detail").innerHTML = `<div class="empty">Couldn't load translated-inputs.jsonl automatically.<br>
       Serve this directory (<code>python -m http.server 8000</code>) or use the file picker above.</div>`;
     return;
   }
-  setData(generated, translated);
+  setData(translated);
 })();
 </script>
 </body>
