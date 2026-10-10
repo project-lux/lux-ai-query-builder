@@ -38,7 +38,7 @@
     "1": "a single simple idea, possibly just a few words",
     "2": "two constraints",
     "3": "three constraints",
-    "4": "four constraints, a detailed request",
+    "4": "four or more constraints, a detailed request",
     "5": "five or more constraints, a long and specific research request"
   },
   "phrasing": [
@@ -46,27 +46,8 @@
     "polite request to a librarian",
     "statement of a research need or assignment",
     "casual, chatty wording",
-    "terse and hurried",
     "contains realistic typos or misspellings",
     "vague or uncertain about what exactly they want",
     "explains the context of why they want it"
-  ],
-  "personas": [
-    "first-year undergraduate exploring for the first time",
-    "history major writing a senior essay",
-    "art history PhD student",
-    "biology or geology major",
-    "engineering student taking a humanities requirement",
-    "literature and creative writing student",
-    "anthropology or archaeology student",
-    "music or theater student",
-    "architecture student",
-    "religious studies or divinity student",
-    "political science or economics student",
-    "international student researching their home country",
-    "student working on a class presentation due tomorrow",
-    "student curious about Yale's own history",
-    "environmental studies student",
-    "medical or nursing student interested in the history of medicine"
   ]
 }
