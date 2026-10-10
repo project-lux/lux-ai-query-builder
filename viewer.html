@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <!--
   Viewer for translated-inputs.jsonl (translated requests and their LUX queries).
-  Run from the repo directory:  python -m http.server 8000
+  Run from the repo directory:  python viewer-server.py
   then open http://localhost:8000/viewer.html
-  (or open the file directly and use the file picker to load translated-inputs.jsonl)
+  Ratings (1 bad, 2 acceptable, 3 good) are saved to ratings.sqlite by the server.
+  With a plain static server (python -m http.server) the viewer works read-only.
 -->
 <html lang="en">
 <head>
@@ -69,6 +70,14 @@
   pre { font: 11px ui-monospace, monospace; background: var(--panel); padding: 6px;
         overflow-x: auto; margin: 4px 0 0; }
   .empty { color: var(--muted); padding: 30px; text-align: center; }
+  .rate { display: flex; gap: 6px; align-items: center; margin: 0 0 12px; }
+  .rate button { font: inherit; padding: 4px 12px; border-radius: 5px; cursor: pointer;
+                 border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .rate button:hover { border-color: var(--muted); }
+  .rate button.on.r1, .badge.r1 { background: #c62828; border-color: #c62828; color: #fff; }
+  .rate button.on.r2, .badge.r2 { background: #b26a00; border-color: #b26a00; color: #fff; }
+  .rate button.on.r3, .badge.r3 { background: #2e7d32; border-color: #2e7d32; color: #fff; }
+  .rate .hint { color: var(--muted); font-size: 11px; margin-left: 6px; }
   .error { color: var(--err); }
 </style>
 </head>
@@ -87,6 +96,13 @@
     <option value="error">Errors</option>
     <option value="zero">Zero hits</option>
   </select>
+  <select id="rating" hidden>
+    <option value="">Any rating</option>
+    <option value="0">Unrated</option>
+    <option value="1">1 Bad</option>
+    <option value="2">2 Acceptable</option>
+    <option value="3">3 Good</option>
+  </select>
   <label><input type="file" id="files" accept=".jsonl" style="width: 190px"></label>
   <span id="stats"></span>
 </header>
@@ -99,6 +115,10 @@ const $ = id => document.getElementById(id);
 let records = [];   // {slot, input, spec, t: translated record}
 let shown = [];
 let selected = null;
+let ratings = {};          // slot -> {rating, rated_at}
+let ratingsEnabled = false;
+const RATING_LABELS = {1: "Bad", 2: "Acceptable", 3: "Good"};
+const ratingOf = r => ratings[r.slot] ? ratings[r.slot].rating : 0;
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const parseJsonl = text => text.split("\n").filter(l => l.trim()).map(l => JSON.parse(l));
@@ -127,12 +147,13 @@ function applyFilters() {
   const q = $("q").value.trim().toLowerCase();
   const f = {discipline: $("discipline").value, record_type: $("record_type").value,
              complexity: $("complexity").value};
-  const scope = $("scope").value, status = $("status").value;
+  const scope = $("scope").value, status = $("status").value, rating = $("rating").value;
   shown = records.filter(r => {
     for (const k in f) if (f[k] && r.spec[k] !== f[k]) return false;
     if (q && !r.search.includes(q)) return false;
     const s = structured(r.t);
     if (scope && !s.some(o => o.scope === scope)) return false;
+    if (rating !== "" && ratingOf(r) !== +rating) return false;
     switch (status) {
       case "nostructured": return !s.length;
       case "multi": return s.length > 1;
@@ -141,9 +162,15 @@ function applyFilters() {
     }
     return true;
   });
-  $("stats").textContent = `${shown.length} shown · ${records.length} translated`;
+  updateStats();
   renderList();
   if (!shown.includes(selected)) select(shown[0] || null);
+}
+
+function updateStats() {
+  const rated = records.filter(r => ratingOf(r)).length;
+  $("stats").textContent = `${shown.length} shown · ${records.length} translated` +
+    (ratingsEnabled ? ` · ${rated} rated` : "");
 }
 
 function renderList() {
@@ -153,7 +180,7 @@ function renderList() {
     const flags = r.t.error ? `<span class="badge err">error</span>` :
                   !s.length ? `<span class="badge kw">keyword only</span>` : "";
     return `<div class="row${r === selected ? " sel" : ""}" data-i="${i}">
-      <span class="slot">${esc(r.slot)}</span>
+      <span class="slot">${esc(r.slot)}${ratingOf(r) ? `<br><span class="badge r${ratingOf(r)}">${ratingOf(r)}</span>` : ""}</span>
       <span class="text" title="${esc(r.input)}">${esc(r.input)}</span>
       <span class="meta"><span class="badge c">c${esc(r.spec.complexity)}</span>${esc(r.spec.record_type)}
         → ${scopes} ${flags}</span>
@@ -168,6 +195,11 @@ $("list").addEventListener("click", e => {
 
 document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (ratingsEnabled && selected && ["0", "1", "2", "3", "Backspace"].includes(e.key)) {
+    e.preventDefault();
+    const v = e.key === "Backspace" ? 0 : +e.key;
+    return rate(selected, v || null, !!v);
+  }
   if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "j" && e.key !== "k") return;
   e.preventDefault();
   const i = shown.indexOf(selected) + (e.key === "ArrowDown" || e.key === "j" ? 1 : -1);
@@ -182,6 +214,39 @@ function select(r) {
   if (row) { row.classList.add("sel"); row.scrollIntoView({block: "nearest"}); }
   renderDetail(r);
 }
+
+// ---- Ratings ----
+async function rate(r, value, advance) {
+  const prev = ratings[r.slot];
+  if (value) ratings[r.slot] = {rating: value}; else delete ratings[r.slot];
+  const next = advance ? shown[shown.indexOf(r) + 1] : null;
+  renderList();
+  updateStats();
+  select(next || r);
+  try {
+    const resp = await fetch("api/ratings", {method: "POST", headers: {"Content-Type": "application/json"},
+                                             body: JSON.stringify({slot: r.slot, rating: value})});
+    if (!resp.ok) throw new Error(await resp.text());
+  } catch (e) {
+    if (prev) ratings[r.slot] = prev; else delete ratings[r.slot];
+    renderList(); updateStats(); select(selected);
+    alert(`Saving rating for ${r.slot} failed: ${e.message}`);
+  }
+}
+
+function ratingBar(r) {
+  if (!ratingsEnabled) return "";
+  const cur = ratingOf(r);
+  return `<div class="rate">` + [1, 2, 3].map(v =>
+    `<button class="r${v}${cur === v ? " on" : ""}" data-rate="${v}">${v} ${RATING_LABELS[v]}</button>`).join("") +
+    (cur ? `<button data-rate="0">clear</button>` : "") +
+    `<span class="hint">click or press 1–3 to rate and go to next · 0 clears · ↑↓ to move</span></div>`;
+}
+
+$("detail").addEventListener("click", e => {
+  const b = e.target.closest("button[data-rate]");
+  if (b && selected) rate(selected, +b.dataset.rate || null, +b.dataset.rate > 0);
+});
 
 // ---- Query tree rendering ----
 const fmtVal = v => typeof v === "string"
@@ -225,7 +290,7 @@ function renderOption(o) {
 function renderDetail(r) {
   if (!r) { $("detail").innerHTML = `<div class="empty">Nothing selected</div>`; return; }
   const s = r.spec;
-  let html = `<h2>${esc(r.input)}</h2>
+  let html = ratingBar(r) + `<h2>${esc(r.input)}</h2>
     <div class="spec">
       <b>${esc(s.discipline)}</b> · ${esc(s.topic)}<br>
       wants <b>${esc(s.record_type)}</b> · complexity <b>${esc(s.complexity)}</b>
@@ -240,7 +305,7 @@ function renderDetail(r) {
 }
 
 // ---- Loading ----
-for (const id of ["q", "discipline", "record_type", "complexity", "scope", "status"]) {
+for (const id of ["q", "discipline", "record_type", "complexity", "scope", "status", "rating"]) {
   $(id).addEventListener(id === "q" ? "input" : "change", applyFilters);
 }
 
@@ -263,6 +328,10 @@ async function fetchJsonl(fn) {
       Serve this directory (<code>python -m http.server 8000</code>) or use the file picker above.</div>`;
     return;
   }
+  try {
+    const resp = await fetch("api/ratings", {cache: "no-store"});
+    if (resp.ok) { ratings = await resp.json(); ratingsEnabled = true; $("rating").hidden = false; }
+  } catch (e) { /* static server: read-only */ }
   setData(translated);
 })();
 </script>
