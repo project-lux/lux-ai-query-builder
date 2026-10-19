@@ -1,10 +1,14 @@
 import json
+import re
 import sys
+import time
 from urllib.parse import quote_plus
 
 import requests
 from google import genai
 from google.genai import types
+
+import gemini_usage
 
 with open("google_project.txt") as fh:
     gcp_name = fh.read().strip()
@@ -19,6 +23,11 @@ with open("system-prompt-improve.txt") as fh:
 
 
 gemini_model = "gemini-3.5-flash-lite"
+
+# Local OpenAI-compatible server (MTPLX)
+LOCAL_URL = "http://localhost:8888/v1/chat/completions"
+local_model = "mtplx-qwen38-27b-bare-speed"
+local_thinking = True
 generated_config = types.GenerateContentConfig(
     temperature=0.8,
     top_p=0.95,
@@ -94,18 +103,61 @@ def generate_gemini(prompt, which="build"):
     contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
     output = []
     cfg = generated_config if which == "build" else config_improve
+    gemini_usage.check()
+    usage = None
     for chunk in gemini.models.generate_content_stream(
         model=gemini_model,
         contents=contents,
         config=cfg,
     ):
-        output.append(chunk.text)
+        output.append(chunk.text or "")
+        usage = chunk.usage_metadata or usage
+    gemini_usage.record(usage, f"query-cli {which}")
     jstr = "".join(output)
     try:
         js = json.loads(jstr)
         return js
     except Exception:
         print(jstr)
+        sys.stdout.flush()
+        return None
+
+
+def generate_local(prompt, which="build", server_wait=1800):
+    sp = system_prompt if which == "build" else system_prompt_improve
+    body = {
+        "model": local_model,
+        "messages": [
+            {"role": "system", "content": sp},
+            {"role": "user", "content": prompt},
+        ],
+        "temperature": 0.8,
+        "top_p": 0.95,
+        "max_tokens": 12000,
+        "response_format": {"type": "json_object"},
+    }
+    if not local_thinking:
+        body["chat_template_kwargs"] = {"enable_thinking": False}
+    # Wait out server restarts rather than failing every remaining request
+    deadline = time.time() + server_wait
+    while True:
+        try:
+            resp = requests.post(LOCAL_URL, json=body, timeout=1800)
+            break
+        except requests.ConnectionError:
+            if time.time() > deadline:
+                raise
+            print("Local server unreachable, retrying in 30s")
+            sys.stdout.flush()
+            time.sleep(30)
+    resp.raise_for_status()
+    text = resp.json()["choices"][0]["message"].get("content") or ""
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text).strip()
+    try:
+        return json.loads(text)
+    except Exception:
+        print(text)
         sys.stdout.flush()
         return None
 

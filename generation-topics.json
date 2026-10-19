@@ -1,0 +1,802 @@
+[
+  {
+    "discipline": "Physics",
+    "topics": [
+      "Quark-gluon plasma in relativistic heavy-ion collisions",
+      "Topological invariants in non-Hermitian physical systems",
+      "Neutrino oscillation measurements at Daya Bay",
+      "Spin-glass dynamics and replica symmetry breaking",
+      "Muon anomalous magnetic moment precision measurements",
+      "Plasma turbulence in magnetic confinement fusion",
+      "Statistical physics of active matter collectives",
+      "Cavitation dynamics in turbulent multiphase fluid flow",
+      "Inertial confinement fusion diagnostic techniques",
+      "General relativistic tests of gravitational frame-dragging",
+      "Nonlinear optical solitary waves and filamentation",
+      "Satyendra Nath Bose and quantum statistical foundations",
+      "J. Willard Gibbs thermodynamic phase equilibrium papers",
+      "Nineteenth-century brass precision galvanometers and dip circles",
+      "Phonon dispersion relations in low-dimensional lattices"
+    ]
+  },
+  {
+    "discipline": "Quantum Science and Technology",
+    "topics": [
+      "Superconducting transmon qubit architectures",
+      "Quantum error correction surface codes",
+      "Rydberg atom arrays for quantum simulation",
+      "Nitrogen-vacancy diamond centers in quantum sensing",
+      "Satellite-to-ground quantum key distribution experiments",
+      "Continuous-variable photonic quantum computing",
+      "Majorana zero modes for topological qubits",
+      "Variational quantum eigensolvers in molecular simulation",
+      "Trapped-ion quantum computing gate fidelities",
+      "Cavity quantum electrodynamics microwave resonators",
+      "Blind quantum computing protocols and privacy",
+      "Bosonic cat codes for quantum memories",
+      "Quantum annealing algorithms for combinatorial optimization",
+      "Historical manuscripts on the EPR paradox",
+      "Cryogenic microwave amplifiers for quantum readout"
+    ]
+  },
+  {
+    "discipline": "Astronomy and Astrophysics",
+    "topics": [
+      "exoplanet atmospheric characterization via transmission spectroscopy",
+      "fast radio burst localization and magnetar origins",
+      "gravitational wave multi-messenger astronomy",
+      "submillimeter interferometry of protoplanetary disks",
+      "dark matter halo substructure simulations",
+      "cosmic microwave background B-mode polarization detection",
+      "tidal disruption events in active galactic nuclei",
+      "stellar population synthesis in high-redshift galaxies",
+      "relativistic jet formation in supermassive black holes",
+      "asteroseismology of red giant branch stars",
+      "Type Ia supernova cosmology and cosmic acceleration",
+      "early Islamic astrolabes and celestial globes",
+      "ancient Maya astronomical tables in codices",
+      "photographic glass plate archives in stellar classification",
+      "helioseismic observations of solar flare dynamics"
+    ]
+  },
+  {
+    "discipline": "Chemistry",
+    "topics": [
+      "organocatalysis in asymmetric organic synthesis",
+      "transition metal-catalyzed carbon-carbon cross-coupling",
+      "electrochemical carbon dioxide reduction catalysts",
+      "femtosecond spectroscopy of chemical reaction dynamics",
+      "solid-state NMR characterization of heterogeneous catalysts",
+      "supramolecular host-guest coordination chemistry",
+      "photoredox catalysis for chemical bond activation",
+      "density functional theory in reaction mechanism modeling",
+      "tandem mass spectrometry for metabolomic profiling",
+      "lanthanide coordination complexes for luminescence imaging",
+      "total synthesis of marine polyketide natural products",
+      "homogeneous water oxidation catalysis mechanisms",
+      "mechanochemical synthesis of solvent-free organic compounds",
+      "medieval Arabic treatises on distillation and sublimation",
+      "indigo vat dyeing reduction-oxidation chemistry"
+    ]
+  },
+  {
+    "discipline": "Mathematics and Statistics",
+    "topics": [
+      "High-dimensional statistical inference and random matrix theory",
+      "Optimal transport and Wasserstein metric analysis",
+      "Symplectic geometry and Hamiltonian dynamical systems",
+      "Markov chain Monte Carlo convergence diagnostics",
+      "Islamic Golden Age algebraic and geometric manuscripts",
+      "Langlands program and automorphic forms",
+      "Topological data analysis and persistent homology",
+      "Stochastic partial differential equations and Malliavin calculus",
+      "Nonparametric Bayesian modeling with Dirichlet processes",
+      "Kerala school astronomical and trigonometric treatises",
+      "Causal inference using directed acyclic graphs",
+      "Arithmetic geometry of elliptic curves",
+      "Extremal and probabilistic combinatorics",
+      "Spectral graph theory and Laplacian matrices",
+      "Historical mechanical slide rules and calculating devices"
+    ]
+  },
+  {
+    "discipline": "Computer Science and Artificial Intelligence",
+    "topics": [
+      "self-supervised representation learning in computer vision",
+      "approximation algorithms for NP-hard graph problems",
+      "low-resource multilingual machine translation architectures",
+      "zero-knowledge proofs and cryptographic protocol verification",
+      "reinforcement learning for autonomous robotic manipulation",
+      "algorithmic fairness and bias mitigation in predictive modeling",
+      "Byzantine fault tolerance in distributed consensus protocols",
+      "early mechanical computation and punch card tabulating systems",
+      "Soviet cybernetics and automated economic information networks",
+      "graph database indexing and distributed query optimization",
+      "formal verification of microkernel operating systems",
+      "diffusion models for multimodal content generation",
+      "deep learning architectures for protein structure prediction",
+      "neuromorphic hardware for edge artificial intelligence",
+      "dense retrieval and neural ranking algorithms"
+    ]
+  },
+  {
+    "discipline": "Engineering",
+    "topics": [
+      "membrane bioreactors for municipal wastewater treatment",
+      "geotechnical slope stability analysis in seismic regions",
+      "microfluidic organ-on-a-chip device fabrication",
+      "photovoltaic inverter control and microgrid stability",
+      "aerodynamic optimization of transonic aircraft wings",
+      "ancient Persian qanat groundwater management systems",
+      "solid oxide fuel cell transport phenomena",
+      "autonomous underwater vehicle guidance and control",
+      "structural health monitoring of cable-stayed bridges",
+      "multiphase fluid flow in pipeline networks",
+      "desalination using low-energy forward osmosis membranes",
+      "microwave passive component design for telecommunications",
+      "fatigue life prediction of offshore wind turbine monopiles",
+      "process safety engineering in petrochemical distillation columns",
+      "biomedical stent hydrodynamics and hemodynamic stress"
+    ]
+  },
+  {
+    "discipline": "Molecular and Cell Biology",
+    "topics": [
+      "Cryo-electron microscopy of ribosome assembly",
+      "Autophagy regulation in mammalian cells",
+      "Endoplasmic reticulum stress and unfolded protein response",
+      "Historical correspondence on cellular theory and cytology",
+      "Mitochondrial dynamics and fission-fusion machinery",
+      "Clathrin-mediated endocytosis pathway kinetics",
+      "Extracellular vesicle biogenesis in Leishmania parasites",
+      "Actin cytoskeleton remodeling during cell motility",
+      "Phase separation in membraneless cellular organelles",
+      "Nuclear pore complex transport mechanisms",
+      "Signal transduction of plant receptor-like kinases",
+      "Ubiquitin-proteasome system degradation assays",
+      "Early electron micrographs of mitochondria and chloroplasts",
+      "Tight junction assembly in epithelial barriers",
+      "Single-molecule fluorescence resonance energy transfer studies"
+    ]
+  },
+  {
+    "discipline": "Genetics and Genomics",
+    "topics": [
+      "Single-cell RNA sequencing computational workflows",
+      "CRISPR-Cas9 multiplex genome editing in crops",
+      "Human Pangenome Reference Consortium diversity data",
+      "Ancient DNA analysis of hominin fossil specimens",
+      "Genome-wide association studies in Sub-Saharan African cohorts",
+      "Long-read sequencing methods for structural variant detection",
+      "Transposable elements and genetic transposition in maize",
+      "Deep metagenomic sequencing of soil microbial communities",
+      "Pharmacogenomic screening for thiopurine methyltransferase polymorphisms",
+      "Synthetic gene drive mechanisms in insect disease vectors",
+      "Chromosome conformation capture and topologically associating domains",
+      "Whole-genome sequencing of indigenous Andean crop landraces",
+      "Comparative genomics of deep-sea hydrothermal vent extremophiles",
+      "Epigenome-wide association studies of twin methylation patterns",
+      "Historical laboratory notebooks on Drosophila genetic linkage"
+    ]
+  },
+  {
+    "discipline": "Neuroscience",
+    "topics": [
+      "optogenetic control of mammalian neural circuits",
+      "Santiago Ramón y Cajal histological drawings of Purkinje cells",
+      "two-photon calcium imaging of dendritic spines",
+      "Hodgkin-Huxley model and squid giant axon electrophysiology",
+      "connectomic reconstruction using serial block-face electron microscopy",
+      "neurobiology of vocal learning in songbirds",
+      "microglial synaptic pruning in neurodevelopment",
+      "electrolocation circuitry in African weakly electric fish",
+      "high-density Neuropixels probes for extracellular recording",
+      "cerebral organoids for modeling corticogenesis",
+      "dopaminergic signaling in reward prediction error",
+      "mechanisms of long-term depression in the cerebellum",
+      "place cell and grid cell spatial navigation systems",
+      "olfactory glomeruli receptor organization in insects",
+      "deep brain stimulation mechanisms in subthalamic nucleus"
+    ]
+  },
+  {
+    "discipline": "Ecology and Evolutionary Biology",
+    "topics": [
+      "adaptive radiation in Galápagos finch morphologies",
+      "coral reef bleaching and symbiont dynamics in the Indo-Pacific",
+      "environmental DNA metabarcoding for freshwater biodiversity",
+      "plant-pollinator network resilience in alpine ecosystems",
+      "sexual selection and plumage evolution in birds-of-paradise",
+      "trophic cascades and apex predator reintroduction",
+      "speciation mechanisms in East African cichlid fishes",
+      "historical herbarium specimens of endangered Hawaiian flora",
+      "microbiome composition and host fitness in wild amphibians",
+      "phylogenetic comparative methods in vertebrate morphological evolution",
+      "ecological niche modeling under shifting climate conditions",
+      "coevolution of mycorrhizal fungi and tropical rainforest trees",
+      "convergent evolution in arid-zone succulent adaptations",
+      "population genetics of fragmented Neotropical primate species",
+      "urban heat islands and rapid evolutionary adaptation in insects"
+    ]
+  },
+  {
+    "discipline": "Medicine and Clinical Research",
+    "topics": [
+      "randomized controlled trial designs in oncology",
+      "chimeric antigen receptor T-cell therapy trials",
+      "minimally invasive robotic cardiac surgery techniques",
+      "point-of-care ultrasound diagnostic protocols",
+      "deep learning for diabetic retinopathy screening",
+      "pediatric acute lymphoblastic leukemia clinical outcomes",
+      "extracorporeal membrane oxygenation in respiratory distress syndrome",
+      "transcatheter aortic valve replacement patient registries",
+      "early biomarker detection of sepsis in intensive care",
+      "post-kala-azar dermal leishmaniasis clinical management",
+      "emergency obstetric care in resource-limited settings",
+      "perfusion magnetic resonance imaging in acute ischemic stroke",
+      "nineteenth-century surgical instrument kits and amputating knives",
+      "dermatological wax moulages in clinical education",
+      "acupuncture efficacy in clinical chronic pain management"
+    ]
+  },
+  {
+    "discipline": "Public Health",
+    "topics": [
+      "Wastewater-based epidemiology for viral surveillance",
+      "Community-led vector control for dengue in Southeast Asia",
+      "Arsenic mitigation in rural Bangladesh drinking water",
+      "Behavioral nudges for routine childhood immunization uptake",
+      "Front-of-package nutrition warning labels in Latin America",
+      "Quarantine station logbooks during 19th-century cholera outbreaks",
+      "One Health surveillance for zoonotic spillover prevention",
+      "Task-shifting models for community-based mental healthcare",
+      "Occupational heat stress guidelines for agricultural workers",
+      "Kangaroo mother care adoption in sub-Saharan Africa",
+      "Supervised injection facilities and overdose mortality rates",
+      "Solar-powered water chlorination in refugee settlements",
+      "Structural racism in urban maternal health disparities",
+      "Cold-chain logistics for remote vaccine distribution",
+      "Lead exposure biomarkers in pediatric populations"
+    ]
+  },
+  {
+    "discipline": "Nursing",
+    "topics": [
+      "Simulation-based debriefing in undergraduate nursing education",
+      "Nurse-led chronic disease self-management interventions",
+      "Palliative symptom assessment protocols in hospice nursing",
+      "Neonatal intensive care kangaroo mother care implementation",
+      "Burnout and compassion fatigue among critical care nurses",
+      "Pressure injury prevention and wound care protocols",
+      "Standardized nursing terminologies in electronic health records",
+      "Nurse navigation models in outpatient oncology care",
+      "Culturally congruent maternal care in indigenous midwifery",
+      "History of military hospital nursing during the Crimean War",
+      "Community health nursing interventions for nomadic populations",
+      "Traditional birth attendant training in rural South Asia",
+      "Gerontological nursing strategies in memory care facilities",
+      "Moral distress and ethical decision-making in bedside nursing",
+      "Triage assessment protocols in emergency department nursing"
+    ]
+  },
+  {
+    "discipline": "Pharmacology",
+    "topics": [
+      "PROTAC-mediated targeted protein degradation",
+      "Pharmacokinetics of lipid nanoparticle mRNA delivery",
+      "Allosteric modulation of G protein-coupled receptors",
+      "Cytochrome P450 polymorphism in drug metabolism",
+      "Safety pharmacology and hERG cardiotoxicity testing",
+      "Marine natural products in anticancer drug discovery",
+      "Peptide receptor radionuclide therapy mechanisms",
+      "Bioactive alkaloids in traditional Amazonian ethnopharmacology",
+      "Antimalarial pharmacology of artemisinin and synthetic endoperoxides",
+      "Pharmacological characterization of snake venom metalloproteinases",
+      "Early development of nitrogen mustard chemotherapies",
+      "Early modern illustrated herbals and pharmacopeias",
+      "Mechanisms of acquired tyrosine kinase inhibitor resistance",
+      "Phytochemical screening of Ayurvedic medicinal plants",
+      "Antibody-drug conjugate linker stability and internalization"
+    ]
+  },
+  {
+    "discipline": "Psychology",
+    "topics": [
+      "Eye-tracking paradigms in infant cognitive development",
+      "Cross-cultural emotion regulation in East Asian populations",
+      "Psychometric validation of modern personality inventories",
+      "Implicit bias measurement across diverse linguistic groups",
+      "Working memory capacity and attentional control",
+      "Cognitive behavioral therapy for pediatric anxiety disorders",
+      "Stereotype threat mechanisms in academic performance",
+      "Historical brass instruments of early experimental psychology",
+      "Acculturation stress and resilience among refugee youth",
+      "False memory induction using misinformation paradigms",
+      "Attachment style dynamics in adult romantic relationships",
+      "Heuristics and cognitive biases in clinical decision-making",
+      "Executive function development in early childhood",
+      "Mindfulness-based stress reduction efficacy studies",
+      "Lev Vygotsky and Soviet socio-cultural psychology texts"
+    ]
+  },
+  {
+    "discipline": "Earth and Climate Science",
+    "topics": [
+      "Paleocene-Eocene Thermal Maximum proxy records",
+      "deep-sea hydrothermal vent geochemistry",
+      "atmospheric river precipitation modeling in East Asia",
+      "subduction zone geodynamics and megathrust earthquakes",
+      "Antarctic ice sheet grounding line dynamics",
+      "silicate weathering and long-term carbon sequestration",
+      "African Humid Period lake level variations",
+      "rare earth element mineralogy in carbonatites",
+      "satellite radar interferometry for volcanic deformation",
+      "mid-ocean ridge basalt petrology",
+      "permafrost thaw biogeochemistry and methane flux",
+      "El Niño-Southern Oscillation oceanographic teleconnections",
+      "early meteorological observation networks in South Asia",
+      "borehole geophysics and crustal stress measurements",
+      "mantle convection modeling and mantle transition zone discontinuities"
+    ]
+  },
+  {
+    "discipline": "Materials Science",
+    "topics": [
+      "Perovskite solar cell degradation mechanisms",
+      "High-entropy alloys phase stability",
+      "Two-dimensional transition metal dichalcogenides",
+      "Additive manufacturing of titanium alloys",
+      "Bio-inspired self-healing polymers",
+      "Transmission electron microscopy of grain boundaries",
+      "Solid-state lithium battery electrolyte interfaces",
+      "Shape memory alloys in biomedical devices",
+      "Wootz steel crucible metallurgy",
+      "Cellulose nanocrystal reinforced biocomposites",
+      "Piezoelectric ceramic thin films",
+      "Silica aerogel synthesis for thermal insulation",
+      "Corrosion resistance of nickel-based superalloys",
+      "Graphene-based electrochemical supercapacitors",
+      "Mokume-gane diffusion bonding and lamination"
+    ]
+  },
+  {
+    "discipline": "Architecture and Urban Planning",
+    "topics": [
+      "Biophilic design in high-density housing",
+      "Mughal garden pavilion architecture and hydraulics",
+      "Tactical urbanism and pedestrianization interventions",
+      "Earthen vernacular architecture of the Sahel",
+      "Brutalist civic centers in Latin America",
+      "Parametric facade systems and daylighting performance",
+      "Post-disaster transitional shelter typologies",
+      "Transit-oriented development in East Asian megacities",
+      "Renaissance architectural treatises and elevation drawings",
+      "Adaptive reuse of industrial waterfronts",
+      "Timber grid shells and mass timber construction",
+      "Soviet constructivist social housing complexes",
+      "Spatial syntax analysis in informal settlements",
+      "Traditional wooden joinery in Japanese temple carpentry",
+      "Climate-responsive design of Middle Eastern windcatchers"
+    ]
+  },
+  {
+    "discipline": "Economics",
+    "topics": [
+      "Microfinance and rural credit in South Asia",
+      "Randomized controlled trials in development economics",
+      "Central bank balance sheets and quantitative easing",
+      "Algorithmic mechanism design and auction theory",
+      "Song dynasty paper money and inflation",
+      "Instrumental variables and causal inference in econometrics",
+      "Behavioral economics of consumer nudge interventions",
+      "Mercantilist trade accounts of chartered companies",
+      "Carbon border adjustments and emissions trading schemes",
+      "Cowrie shell currency in West African trade",
+      "Dynamic stochastic general equilibrium macro models",
+      "Labor market monopsony and wage stagnation",
+      "Sovereign debt restructuring and default contagion",
+      "High-frequency algorithmic trading and market microstructure",
+      "Input-output analysis and national accounting matrices"
+    ]
+  },
+  {
+    "discipline": "History",
+    "topics": [
+      "Ottoman capitulations and diplomatic trade treaties",
+      "Haitian Revolution pamphlets and proclamations",
+      "Meiji era modernization personal diaries",
+      "Trans-Saharan trade networks and caravan chronicles",
+      "Oral histories of the Mau Mau uprising",
+      "Labor union organizing in Appalachian coal mines",
+      "Ming dynasty tributary state correspondence",
+      "Second World War civilian ration books and ephemera",
+      "Abolitionist broadsides and fugitive slave narratives",
+      "Central American solidarity and sanctuary movement records",
+      "Venetian maritime probate inventories and wills",
+      "Subaltern peasant resistance in colonial British India",
+      "Indigenous treaty councils and diplomatic wampum belts",
+      "Sogdian merchant letters and Silk Road contracts",
+      "Spanish flu epidemic municipal health ordinances"
+    ]
+  },
+  {
+    "discipline": "Art History and Visual Culture",
+    "topics": [
+      "Edo period ukiyo-e woodblock printing techniques",
+      "Mughal court miniature paintings and portraiture",
+      "Pre-Raphaelite Brotherhood drawings and studies",
+      "Yoruba beaded crowns and ceremonial regalia",
+      "Harlem Renaissance portrait photography and photojournalism",
+      "Italian Trecento tempera on wood panel paintings",
+      "Qajar dynasty lacquer papier-mache book bindings",
+      "Feminist conceptual art and bodily performance documentation",
+      "Colonial Andean viceregal religious oil paintings",
+      "Constructivist typography and avant-garde poster design",
+      "Chinese literati landscape painting and calligraphy scrolls",
+      "Illuminated Insular and Romanesque gospel manuscripts",
+      "Nineteenth-century botanical watercolor illustrations",
+      "Contemporary Indigenous Australian acrylic dot paintings",
+      "Flemish Baroque preparatory oil sketches"
+    ]
+  },
+  {
+    "discipline": "Law and Jurisprudence",
+    "topics": [
+      "early modern English maritime law treatises",
+      "Nuremberg Trials transcripts and evidentiary exhibits",
+      "Ottoman Kanun legal codes and imperial decrees",
+      "customary land tenure dispute records in Africa",
+      "critical legal studies and feminist jurisprudence",
+      "Qing dynasty homicide casebooks and penal jurisprudence",
+      "international environmental law and climate litigation",
+      "Roman-Dutch civil law in Southern Africa",
+      "Indigenous water rights treaties and adjudication",
+      "medieval illuminated canon law decretals",
+      "algorithmic governance and artificial intelligence liability",
+      "habeas corpus petitions during wartime",
+      "Indigenous legal pluralism in the Andes",
+      "comparative constitutionalism in post-colonial state building",
+      "Islamic commercial law and modern sukuk contracts"
+    ]
+  },
+  {
+    "discipline": "Religious Studies and Theology",
+    "topics": [
+      "Coptic gnostic apocrypha and papyri",
+      "Tibetan Buddhist liturgical texts and commentaries",
+      "Latin American liberation theology tracts",
+      "Sufi mystical treatises and devotional poetry",
+      "Yoruba Ifa divination verses and ritual implements",
+      "Medieval illuminated Books of Hours",
+      "Early modern printed Hebrew Rabbinic responsa",
+      "Protestant Reformation polemical broadsheets",
+      "Daoist ritual manuals and talismanic scripts",
+      "Shinto norito liturgical prayers and shrine records",
+      "Vedic sacrificial commentaries and Upanishadic texts",
+      "American Pentecostal revivalism sermons and tracts",
+      "Syriac Christian liturgical manuscripts and hymnody",
+      "Jain illuminated manuscripts of the Kalpasutra",
+      "Womanist and feminist Christian theological treatises"
+    ]
+  },
+  {
+    "discipline": "Literature and Comparative Literature",
+    "topics": [
+      "Harlem Renaissance literary manuscripts and correspondence",
+      "Tang dynasty regulated verse commentaries",
+      "Postcolonial Francophone Caribbean novels",
+      "Ottoman divan poetry manuscripts",
+      "Early modern translation theory and glossaries",
+      "Latin American boom novels and reception",
+      "Samizdat underground poetry in the Soviet Union",
+      "Modernist little magazines and literary manifestos",
+      "Heian period court memoirs and monogatari",
+      "Arabic maqamat narratives and rhetorical commentary",
+      "Victorian serial novels with publisher proofs",
+      "Post-apartheid South African fiction",
+      "Bilingual editions of indigenous narrative poetry",
+      "German Romanticism fragments and literary theory",
+      "Contemporary ecocritical climate fiction"
+    ]
+  },
+  {
+    "discipline": "Philosophy",
+    "topics": [
+      "Nyaya theories of perception and inference",
+      "Early modern editions of Baruch Spinoza",
+      "Kyoto School phenomenology and Buddhist thought",
+      "Feminist philosophy of science and epistemology",
+      "Ethical frameworks for autonomous artificial intelligence",
+      "Medieval Arabic commentaries on Aristotelian logic",
+      "Neo-Confucian debates on moral psychology",
+      "Philosophy of mind and phenomenal consciousness",
+      "Indigenous Andean concepts of relational ontology",
+      "Modal logic and possible worlds semantics",
+      "Epistemic injustice and testimonial injustice",
+      "Post-Kantian German idealism and dialectics",
+      "Yoruba moral philosophy and personhood concepts",
+      "Ordinary language philosophy and conceptual analysis",
+      "Environmental pragmatism and intergenerational justice"
+    ]
+  },
+  {
+    "discipline": "Music and Musicology",
+    "topics": [
+      "Medieval polyphonic liturgical manuscripts",
+      "Javanese gamelan tuning systems and notation",
+      "Ottoman court makam modal theory treatises",
+      "West African kora performance and repertoire",
+      "Historical keyboard construction and temperaments",
+      "Electroacoustic tape music and graphic scores",
+      "Carnatic raga improvisation and tala systems",
+      "Afro-Cuban batá drumming polyrhythms and song",
+      "Early American shape-note hymnody tunebooks",
+      "Guqin tablature and Ming dynasty treatises",
+      "Renaissance lute intabulations and printed partbooks",
+      "Spectralism and computer-assisted composition techniques",
+      "Bebop harmony and jazz transcription methods",
+      "Andean sikuri panpipe ensemble performance practices",
+      "19th-century bel canto vocal pedagogy manuals"
+    ]
+  },
+  {
+    "discipline": "Archaeology",
+    "topics": [
+      "radiocarbon dating calibration curves",
+      "Late Bronze Age Mediterranean shipwreck cargo",
+      "phytolith and starch grain residue analysis",
+      "Pre-Columbian Mesoamerican obsidian hydration dating",
+      "Indus Valley urban water management infrastructure",
+      "Neolithic Natufian bone sickle hafts",
+      "strontium isotope analysis of ancient human mobility",
+      "airborne lidar mapping of lowland Maya ruins",
+      "Great Zimbabwe dry stone monumental architecture",
+      "dental calculus microfossil analysis in bioarchaeology",
+      "Lapita stamped ceramic distribution in Oceania",
+      "Mississippian earthen platform mound stratigraphy",
+      "archaeometallurgical analysis of early bronze smelting",
+      "Jomon cord-marked hunter-gatherer pottery",
+      "ground-penetrating radar in urban historical archaeology"
+    ]
+  },
+  {
+    "discipline": "Anthropology and Ethnography",
+    "topics": [
+      "Papua New Guinea Highlands shell exchange networks",
+      "Bronislaw Malinowski Trobriand Islands field diaries",
+      "Fore people kuru disease transmission ethnography",
+      "Amazonian shamanism and ayahuasca ritual practices",
+      "Haida and Tlingit potlatch ceremonial regalia",
+      "Toraja funerary effigies and ancestor veneration",
+      "Pastoralist mobility patterns among East African Maasai",
+      "Urban ethnography of informal waste pickers",
+      "Kinship terminology and descent systems in Oceania",
+      "Multispecies ethnography of human-animal interactions",
+      "Tuareg indigo dyed textiles and social status",
+      "Visual anthropology and indigenous filmmaking in Latin America",
+      "Digital ethnography of virtual gaming communities",
+      "Structural violence in undocumented agricultural labor",
+      "Sami reindeer herding traditional ecological knowledge"
+    ]
+  },
+  {
+    "discipline": "Political Science and International Relations",
+    "topics": [
+      "nuclear non-proliferation treaty negotiations",
+      "electoral authoritarianism in post-Soviet states",
+      "truth and reconciliation commission final reports",
+      "African Union peacekeeping operations in Somalia",
+      "propaganda posters of the Non-Aligned Movement",
+      "democratic backsliding and executive aggrandizement",
+      "diplomatic cables regarding the Suez Crisis",
+      "partisan gerrymandering and redistricting algorithms",
+      "indigenous political sovereignty movements in the Andes",
+      "economic sanctions efficacy and humanitarian exemptions",
+      "feminist foreign policy frameworks and implementation",
+      "disinformation campaigns in Southeast Asian elections",
+      "Belt and Road Initiative maritime diplomacy",
+      "rebel governance and civil war territorial control",
+      "participatory budgeting models in Latin America"
+    ]
+  },
+  {
+    "discipline": "Sociology",
+    "topics": [
+      "Chicago School urban ethnographies",
+      "algorithmic bias in contemporary social stratification",
+      "social network analysis of protest mobilization",
+      "informal settlement governance in Latin American favelas",
+      "transnational migrant domestic labor networks",
+      "W. E. B. Du Bois sociological surveys",
+      "microsociology of face-to-face interaction rituals",
+      "caste stratification and occupational mobility in India",
+      "interlocking directorates and corporate power structures",
+      "China hukou system and rural-urban inequality",
+      "sociology of mass incarceration and re-entry",
+      "gig economy platform labor and precarity",
+      "community disaster resilience and social capital",
+      "subcultural formation in urban youth movements",
+      "mixed-methods longitudinal panel study datasets"
+    ]
+  },
+  {
+    "discipline": "Classics and Ancient Studies",
+    "topics": [
+      "Ptolemaic and Roman period Greek papyri",
+      "Attic black-figure and red-figure vase painting",
+      "Mycenaean Linear B administrative clay tablets",
+      "Greco-Bactrian and Indo-Greek royal coinage",
+      "Meroitic funerary inscriptions and Nubian monuments",
+      "Roman lead curse tablets and magical defixiones",
+      "Neo-Assyrian cuneiform royal annals and reliefs",
+      "Etruscan votive terracottas and bronze mirrors",
+      "Late Antique Coptic epistolary manuscripts",
+      "Ancient Greek music theory and surviving notation",
+      "Latin monumental epigraphy and cursus honorum inscriptions",
+      "Homeric textual transmission and Alexandrian scholiasts",
+      "Roman Campanian wall painting and architectural frescoes",
+      "Babylonian astronomical diaries and Hellenistic horoscopes",
+      "Nabataean architectural sculpture and epigraphy at Petra"
+    ]
+  },
+  {
+    "discipline": "Theater and Performance Studies",
+    "topics": [
+      "Commedia dell'arte character masks and scenarios",
+      "Yoruba Aláàrìnjó traveling theater masquerades",
+      "Mid-century stage lighting plots and cue sheets",
+      "Postdramatic theater and devised performance scores",
+      "Kathakali makeup treatises and dance-drama costumes",
+      "Federal Theatre Project living newspaper scripts",
+      "Japanese Noh theater masks and notation books",
+      "Scenography sketches and stage design maquettes",
+      "Bertolt Brecht epic theater production notebooks",
+      "Kutiyattam Sanskrit temple theater performance manuals",
+      "Victorian melodrama prompt books and playbills",
+      "Body art and performance art documentation",
+      "Javanese wayang kulit shadow puppet performance",
+      "Immersive and site-specific theater participatory design",
+      "Street theater and political protest performance"
+    ]
+  },
+  {
+    "discipline": "Film and Media Studies",
+    "topics": [
+      "early silent cinema production stills",
+      "Third Cinema manifestos and political documentaries",
+      "video game preservation and source code archives",
+      "magic lantern glass slide projection sets",
+      "Japanese New Wave avant-garde cinema",
+      "Nollywood direct-to-video distribution networks",
+      "Soviet montage film theory and editing notes",
+      "Pre-Code Hollywood film censorship records",
+      "French New Wave screenplays and shooting scripts",
+      "television broadcasting ephemera and program guides",
+      "Parallel Cinema movement in India",
+      "feminist video art and experimental media",
+      "early color cinematography processes and tinting manuals",
+      "radio drama sound effects recordings",
+      "Indigenous media collectives and community broadcasting"
+    ]
+  },
+  {
+    "discipline": "Linguistics",
+    "topics": [
+      "acoustic analysis of Khoisan click consonants",
+      "ergative-absolutive alignment in Caucasian languages",
+      "documentation and revitalization of Indigenous Amazonian languages",
+      "eye-tracking studies in real-time sentence processing",
+      "polysynthetic morphology in Northern Athabaskan languages",
+      "neural machine translation for low-resource languages",
+      "grammaticalization pathways in Bantu languages",
+      "missionary grammars and vocabularies of Colonial Quechua",
+      "code-switching patterns in multilingual urban youth dialects",
+      "reconstruction of Proto-Austronesian phonological systems",
+      "Paninian formal grammatical tradition and Ashtadhyayi treatises",
+      "prosodic features and tone spreading in Sino-Tibetan languages",
+      "phonological development and babbling in early language acquisition",
+      "corpus-based sociolinguistic variation in African American English",
+      "spatial frame of reference in Australian Indigenous languages"
+    ]
+  },
+  {
+    "discipline": "Paleontology",
+    "topics": [
+      "high-resolution synchrotron microtomography of fossil embryos",
+      "Cambrian Chengjiang biota soft-tissue preservation",
+      "Neogene mammalian tooth enamel microwear analysis",
+      "Late Cretaceous theropod dentition and biomechanics",
+      "nineteenth-century fossil collecting field journals and sketches",
+      "foraminiferal biostratigraphy of the Paleocene-Eocene Thermal Maximum",
+      "Gondwanan sauropod trackway ichnology and locomotion",
+      "Permian-Triassic marine invertebrate extinction turnover",
+      "Early Devonian Rhynie chert plant anatomies",
+      "fossil resin amber inclusions from Southeast Asia",
+      "phylogenetic comparative methods in macroevolutionary rates",
+      "Devonian placoderm armor from the Gogo Formation",
+      "stable isotope sclerochronology of fossil mollusks",
+      "Ediacaran macroorganism fossil molds and taphonomy",
+      "Quaternary megafaunal extinctions in the Pampas"
+    ]
+  },
+  {
+    "discipline": "Cartography and Historical Geography",
+    "topics": [
+      "Portolan charts of the Mediterranean basin",
+      "Ottoman maritime cartography and Piri Reis",
+      "Indigenous Marshallese stick charts for wave navigation",
+      "Joseon dynasty world maps and Kangnido",
+      "Early printed editions of Ptolemy's Geographia",
+      "Dutch Golden Age terrestrial and celestial globes",
+      "British Ordnance Survey trigonometric field records",
+      "Al-Idrisi and medieval Islamic world cartography",
+      "Sanborn fire insurance maps of American cities",
+      "Historical geographic information systems and spatial humanities",
+      "Jesuit cartographic surveys of Qing China",
+      "Colonial boundary demarcation maps of Africa",
+      "Aztec and early colonial Mexican pictorial lienzos",
+      "Copper-engraved nautical sea atlases",
+      "Topographical trench maps of the Western Front"
+    ]
+  },
+  {
+    "discipline": "Gender, Sexuality, and Feminist Studies",
+    "topics": [
+      "Mid-century lesbian pulp fiction paperbacks",
+      "Third-wave feminist zines and underground print culture",
+      "Hijra legal rights movements in South Asia",
+      "Suffragette hunger strike medals and propaganda postcards",
+      "Transgender oral histories and early gender-affirming clinics",
+      "Muxe cultural traditions and indigenous gender roles",
+      "Queer Harlem Renaissance poetry and correspondence",
+      "Reproductive justice pamphlets and illegal abortion networks",
+      "Two-Spirit identities in Indigenous North American cultures",
+      "Early twentieth-century Japanese feminist journal Seito",
+      "ACT UP demonstration posters and AIDS activist graphics",
+      "Queer tango subcultures in early twentieth-century Argentina",
+      "African feminist manifestos and anti-colonial organizing",
+      "Romantic friendships and diaries of nineteenth-century women",
+      "Ottoman cross-dressing and female homoerotic miniature paintings"
+    ]
+  },
+  {
+    "discipline": "Area and Regional Studies",
+    "topics": [
+      "Sahel pastoralist conflict and climate adaptation",
+      "Quilombo maroon communities in colonial Brazil",
+      "Post-war Okinawan reversion movement pamphlets",
+      "Dalit civil rights periodicals in Maharashtra",
+      "Mekong River transboundary water governance",
+      "Soviet Central Asian cotton monoculture propaganda",
+      "Maghrebi Berber cultural movement ephemera",
+      "Nuclear testing resistance in the Marshall Islands",
+      "Sámi reindeer herding customary land rights",
+      "Post-Yugoslav reconciliation and memory politics",
+      "Indo-Caribbean indentured labor plantation records",
+      "Highland Southeast Asia borderlands trade networks",
+      "Lithium extraction governance in the Atacama Basin",
+      "Gulf Cooperation Council economic diversification strategies",
+      "Silk Road oasis settlements in the Tarim Basin"
+    ]
+  },
+  {
+    "discipline": "Museum Studies and Cultural Heritage",
+    "topics": [
+      "Repatriation of Benin Bronzes",
+      "NAGPRA compliance and sacred object return",
+      "Early modern cabinets of curiosities",
+      "Laser cleaning of historical stone monuments",
+      "Preventive conservation in tropical climates",
+      "Illicit trafficking of Pre-Columbian antiquities",
+      "Digital photogrammetry of damaged archaeological heritage",
+      "Decolonization of ethnographic museum displays",
+      "Cellulose nitrate film degradation and storage",
+      "UNESCO intangible cultural heritage documentation",
+      "Nazi-looted art provenance research methodologies",
+      "Anoxic pest management for historic collections",
+      "Community co-curation in indigenous museums",
+      "Emergency salvage of flooded archival collections",
+      "Multisensory accessibility in contemporary exhibition design"
+    ]
+  }
+]

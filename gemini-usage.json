@@ -1,0 +1,45 @@
+{
+  "input_tokens": 3449012,
+  "output_tokens": 457595,
+  "thinking_tokens": 391859,
+  "calls": 644,
+  "cost": 9.772217,
+  "by_label": {
+    "generate-inputs batch": {
+      "input_tokens": 3907,
+      "output_tokens": 4704,
+      "thinking_tokens": 16385,
+      "calls": 10,
+      "cost": 0.082016
+    },
+    "generate-inputs embedding": {
+      "input_tokens": 2100,
+      "output_tokens": 0,
+      "thinking_tokens": 0,
+      "calls": 2,
+      "cost": 0.001576
+    },
+    "estimated prior usage (untracked)": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "thinking_tokens": 0,
+      "calls": 0,
+      "cost": 4.0
+    },
+    "generate-inputs call": {
+      "input_tokens": 412077,
+      "output_tokens": 242004,
+      "thinking_tokens": 0,
+      "calls": 82,
+      "cost": 1.216578
+    },
+    "query-cli build": {
+      "input_tokens": 3030928,
+      "output_tokens": 210887,
+      "thinking_tokens": 375474,
+      "calls": 550,
+      "cost": 4.472056
+    }
+  },
+  "updated": "2026-10-09T20:27:06"
+}
