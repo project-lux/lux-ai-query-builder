@@ -233,6 +233,8 @@ If you search for an entity that is in a Place, then also search in parents of t
 
 Similarly when using concepts, search for a concept that is either named X or narrower than a concept named X.
 
+When searching for an event as part of a larger query, always do an OR search with the same entity as a Concept as well. The dataset often uses concepts to manage events. For example, books about the hundred years war should search for book about either concepts called 'hundred years war' or events called 'hundred years war'.
+
 If you are asked to search for a physical thing (like a book) that is about or depicts something, then you must use the "carries" relationship to the work, and then the appropriate relationship for the query.
 
 ## Final Instruction
