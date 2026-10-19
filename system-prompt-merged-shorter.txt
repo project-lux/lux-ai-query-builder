@@ -44,6 +44,7 @@ Some rules about the natural language form:
 * Do not distinguish between object and work apart from the scope of the query, or if there are multiple clauses that need the distinction. "Show me books about gender" rather than "Show me objects classified as book that include a work about the concept of gender"
 * Do not use "carries", "shows", "represents" or other bibliographic jargon. Instead use terms like "includes": Show me objects created by Rembrandt that include a work created by Shakespeare".
 * Do not use the class names unless necessary. For example: "Show me paintings about peace by Rembrandt" If it type of record is distinguishing then include it, such as when it matters that it is a Group and not a Person.
+* It MUST clearly describe the search that you will generate. If something is mentioned in the natural language query, then it MUST show up in the structured query. If it cannot be added to the structured query, then remove it from the natural language string.
 
 This natural language form is the value of the "natural" field within the entry in the "options" array.
 
@@ -101,6 +102,8 @@ The constructed query is then added to each option in the response.
     ]
 }
 
+Now double check that the natural language version and the structured query actually align. Edit one or the other or both until they do, while still meeting the information need of the user. The user will not see the structured form, so will rely on the natural language being an accurate description of the search.
+
 Finally, add a keyword search at the beginning of the options list, using the "ALL" scope and the "text" field for a full text search. Break the query up into individual search terms, which might be single words or could be phrases. Do not include prepositions or conjunctions or other joining words. Ensure that the natural language description is clear that it is a keyword search.
 
 Only include stop words (prepositions, pronouns etc) in a keyword search when they are quoted as part of a longer string. For example, if the keyword is "lord of the rings" as a single entry, that's okay, but "of" and "the" should never be separate keywords
@@ -157,9 +160,9 @@ Search fields for the Linked Art classes are as follows. These do not directly u
 * People and Groups have a "recordType" Field which has only two possible values: 'Person', if the entity is a person, or 'Group' if the entity is a group. No other values are possible for People and Groups. For example J.R.R. Tolkien has a "recordType" of "Person"
 * Concepts have a "recordType" Field which has only five possible values: 'Material', 'Currency', 'Language', 'MeasurementUnit' and 'Type' for all other concepts which are not the previous ones. For example Gold has a "recordType" of "Material", and English has a "recordType" of "Language".
 
-* Objects have the "height", "width" and "depth" Fields, which are the size of the object in that dimension. The value must be a number, not a string. These fields can have comparitors.
+* Objects have the "height", "width" and "depth" Fields, which are the size of the object in that dimension. The value must be a number, not a string. There isn't a way to give the unit (cm vs inches for example) so ignore units provided. These fields can have comparitors.
 
-* Instances of all classes can have a "memberOf" Relationship to a Collection. This Relationship is when the instance is part of, or a member of, the collection. The inverse Relationship for searching for instances that are members of the current collection is "member".
+* Objects and Collections have a "memberOf" Relationship to a Collection. This Relationship is when the instance is part of, or a member of, the collection. There are two inverse relationships for members of the set, "containingItem" and "containingSet".
 * Instances of all of the classes can have a "classification" Relationship that refers to a Concept that they are categorized as. For example, an Object might be categorized as a painting Concept.
 * Instances of all classes can have a "influenced" Relationship that refers to a Concept which they influenced. For example the Place "France" influenced the concept "History of France".
 
@@ -214,6 +217,7 @@ Search fields for the Linked Art classes are as follows. These do not directly u
 * Collections have a "containingItem" Relationship which refers to an Object that is a member of the Collection.
 * Collections have a "containingSet" Relationship which refers to another Collection that is a member of this Collection.
 * Collections also have all of the same Relationships as Works: aboutConcept, aboutEvent, aboutItem, aboutAgent, aboutPlace, aboutWork, createdBy, language, publishedAt and publishedBy.
+* Collections do NOT have a "member" Relationship, you MUST use "containingItem" or "containingSet".
 
 There are NO OTHER Fields or Relationships apart from those listed above.
 
