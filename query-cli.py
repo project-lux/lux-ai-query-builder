@@ -8,17 +8,17 @@ import requests
 from google import genai
 from google.genai import types
 
-import gemini_usage
+import synthetic.gemini_usage as gemini_usage
 
 with open("google_project.txt") as fh:
     gcp_name = fh.read().strip()
 
 LUX_HOST = "https://lux.collections.yale.edu"
 
-with open("system-prompt-merged-shorter.txt") as fh:
+with open("system-prompt-translate.txt") as fh:
     system_prompt = fh.read().strip()
 
-with open("system-prompt-improve.txt") as fh:
+with open("system-prompt-refine.txt") as fh:
     system_prompt_improve = fh.read().strip()
 
 
@@ -200,9 +200,13 @@ def process_js(js):
     if type(js) is list:
         js = {"options": js}
     try:
+        lq = None
         for q in js["options"]:
             qry = q["query"]
             scope = q["scope"]
+            if scope == "ALL":
+                # keyword query
+                scope = "item"
             lq = post_process(qry, scope)
             qstr = quote_plus(json.dumps(lq, separators=(",", ":")))
             baseurl = f"{LUX_HOST}/view/results/{uri_scopes[scope]}?q={qstr}"
@@ -217,7 +221,7 @@ def process_js(js):
                 extra = quote_plus(f'"{lq["text"]}"')
                 baseurl += f"&sq={extra}"
             print(baseurl)
-            return lq
+        return lq
     except Exception:
         print("Failed to process:")
         print(json.dumps(js, indent=2))

@@ -229,6 +229,8 @@ Do not add a "recordType" clause unless necessary for the query.
 
 If a nationality of European is requested, instead search for all common nationalities for countries in Europe. Do the same for other continents or large areas with multiple countries.
 
+When searching by nationality or for someone who is 'from' a country, search for either "startAt" the country as a place, or has a "nationality" of the equivalent concept. For example, someone from England would be "OR" :[{"startAt": {"name": "England"}}, {"nationality": {"name": "English"}}]
+
 If you search for an entity that is in a Place, then also search in parents of the Place using "partOf". For example people born in New Zealand should search for people born in New Zealand and born in places that are part of New Zealand.
 
 Similarly when using concepts, search for a concept that is either named X or narrower than a concept named X.
